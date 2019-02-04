@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".character.CharOrganizationStatusFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        android:background="#aaffffff">
+
+        <TextView
+            android:id="@+id/party"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/party"/>
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:columnCount="1"
+            app:rowCount="4"
+            >
+
+            <fragment
+                android:id="@+id/char1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:name="com.example.mitake.aiapplication.character.CharStatusFragment"
+                app:layout_rowWeight="1"
+                tools:layout="@layout/fragment_char_status"/>
+
+            <fragment
+                android:id="@+id/char2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:name="com.example.mitake.aiapplication.character.CharStatusFragment"
+                app:layout_rowWeight="1"
+                tools:layout="@layout/fragment_char_status"/>
+
+            <fragment
+                android:id="@+id/char3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:name="com.example.mitake.aiapplication.character.CharStatusFragment"
+                app:layout_rowWeight="1"
+                tools:layout="@layout/fragment_char_status"/>
+
+            <fragment
+                android:id="@+id/char4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:name="com.example.mitake.aiapplication.character.CharStatusFragment"
+                app:layout_rowWeight="1"
+                tools:layout="@layout/fragment_char_status"/>
+
+        </android.support.v7.widget.GridLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

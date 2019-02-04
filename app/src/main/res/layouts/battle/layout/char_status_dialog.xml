@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/drawable_quest_type"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/target_char_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="4dp"
+            android:shadowColor="#ff4500"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:text=""
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:gradientEnd="#ff4500"
+            app:gradientStart="#fffaf0" />
+
+        <LinearLayout
+            android:id="@+id/layout_map_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_type"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/map_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_char_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/char_type"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/char_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_hp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/HP"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/hp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_mp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/MP"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/mp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_attack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/attack"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/attack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_defense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/defense"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/defense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_SP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/SP"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/SP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/other_status"
+                android:textSize="16sp"
+                android:textColor="#ffff00"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/other"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="24dp"
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="@string/OK"
+            android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

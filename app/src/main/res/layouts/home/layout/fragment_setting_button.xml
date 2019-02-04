@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/user"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="24dp"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:background="@drawable/button_off_background"
+            android:text="プロフィール変更"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/setting"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="24dp"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:background="@drawable/button_off_background"
+            android:text="設定変更"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/title"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="24dp"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:background="@drawable/button_off_background"
+            android:text="タイトルに戻る"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/others"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="24dp"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:background="@drawable/button_off_background"
+            android:text="その他"
+            android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

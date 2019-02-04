@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/background_use_ai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/use_ai_text"
+            android:layout_alignStart="@id/use_ai_text"
+            android:layout_alignEnd="@id/use_ai_text"
+            android:layout_alignTop="@id/use_ai_text"
+            android:scaleType="centerCrop"
+            android:background="@drawable/battle_background_ai"/>
+
+        <TextView
+            android:id="@+id/use_ai_text"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:text="@string/use_ai"
+            android:textColor="#ffffff"/>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

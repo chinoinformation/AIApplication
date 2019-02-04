@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.SettingActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_button"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/main_text_ai"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/background1"
+            android:text="@string/menu"
+            android:gravity="center"
+            app:gradientStart="#ffd700"
+            app:gradientEnd="#ffa500"
+            android:shadowColor="#ffa500"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/setting_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/setting_main_button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

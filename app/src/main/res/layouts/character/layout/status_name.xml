@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/status_HP"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/HP"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="4dp"
+                android:layout_margin="4dp"
+                android:gravity="left"
+                android:textColor="#00ffff"
+                android:textSize="16sp"
+                android:text="@string/HP" />
+
+            <TextView
+                android:id="@+id/text_HP"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingEnd="4dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="@string/textHP"
+                 />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/status_MP"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/MP"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="4dp"
+                android:layout_margin="4dp"
+                android:gravity="left"
+                android:textColor="#00ffff"
+                android:textSize="16sp"
+                android:text="@string/MP" />
+
+            <TextView
+                android:id="@+id/text_MP"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingEnd="4dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="@string/textMP" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/status_attack"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/attack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="4dp"
+                android:layout_margin="4dp"
+                android:gravity="left"
+                android:textColor="#00ffff"
+                android:textSize="16sp"
+                android:text="@string/attack" />
+
+            <TextView
+                android:id="@+id/text_attack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingRight="4dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="@string/textAttack" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/status_defense"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/defense"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="4dp"
+                android:layout_margin="4dp"
+                android:gravity="left"
+                android:textColor="#00ffff"
+                android:textSize="16sp"
+                android:text="@string/defense" />
+
+            <TextView
+                android:id="@+id/text_defense"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingRight="4dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="@string/textDefense" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/status_move"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/move"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="4dp"
+                android:layout_margin="4dp"
+                android:gravity="left"
+                android:textColor="#00ffff"
+                android:textSize="16sp"
+                android:text="@string/move" />
+
+            <TextView
+                android:id="@+id/text_move"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="4dp"
+                android:layout_marginBottom="8dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="@string/textMove" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/status_attack_range"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/attack_range"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="4dp"
+                android:layout_margin="4dp"
+                android:gravity="left"
+                android:textColor="#00ffff"
+                android:textSize="16sp"
+                android:text="@string/attackRange" />
+
+            <TextView
+                android:id="@+id/text_attack_range"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="4dp"
+                android:layout_marginBottom="8dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="@string/textAttackRange" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

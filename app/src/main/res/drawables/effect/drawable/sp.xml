@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- oneshot="true":描画１回のみ、oneshot="false"：繰り返し -->
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <!-- duration：表示間隔[msec]-->
+    <item android:drawable="@drawable/sp1" android:duration="100" />
+    <item android:drawable="@drawable/sp2" android:duration="100" />
+    <item android:drawable="@drawable/sp3" android:duration="100" />
+    <item android:drawable="@drawable/sp4" android:duration="100" />
+    <item android:drawable="@drawable/sp5" android:duration="100" />
+    <item android:drawable="@drawable/sp6" android:duration="100" />
+    <item android:drawable="@drawable/sp7" android:duration="100" />
+    <item android:drawable="@drawable/sp8" android:duration="100" />
+    <item android:drawable="@drawable/sp9" android:duration="100" />
+    <item android:drawable="@drawable/sp10" android:duration="100" />
+    <item android:drawable="@drawable/sp11" android:duration="100" />
+    <item android:drawable="@drawable/sp12" android:duration="100" />
+    <item android:drawable="@drawable/sp13" android:duration="100" />
+    <item android:drawable="@drawable/sp14" android:duration="100" />
+    <item android:drawable="@drawable/sp15" android:duration="100" />
+    <item android:drawable="@drawable/sp16" android:duration="100" />
+    <item android:drawable="@drawable/sp17" android:duration="100" />
+    <item android:drawable="@drawable/sp18" android:duration="100" />
+    <item android:drawable="@drawable/sp19" android:duration="100" />
+    <item android:drawable="@drawable/sp20" android:duration="100" />
+    <item android:drawable="@drawable/sp21" android:duration="100" />
+    <item android:drawable="@drawable/sp22" android:duration="100" />
+    <item android:drawable="@drawable/sp23" android:duration="100" />
+    <item android:drawable="@drawable/sp24" android:duration="100" />
+    <item android:drawable="@drawable/sp25" android:duration="100" />
+    <item android:drawable="@drawable/sp26" android:duration="100" />
+    <item android:drawable="@drawable/sp27" android:duration="100" />
+    <item android:drawable="@drawable/sp28" android:duration="100" />
+    <item android:drawable="@drawable/sp29" android:duration="100" />
+    <item android:drawable="@drawable/sp30" android:duration="100" />
+</animation-list>

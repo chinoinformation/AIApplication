@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/drawable_quest_type">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scroll_log"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text=""
+                android:textColor="#ffffff"/>
+
+        </ScrollView>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="24dp"
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="@string/OK"
+            android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

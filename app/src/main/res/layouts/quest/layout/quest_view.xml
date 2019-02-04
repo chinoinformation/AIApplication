@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_quest1">
+
+    <LinearLayout
+        android:id="@+id/background_quest_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="4dp"
+        android:orientation="horizontal"
+        >
+
+        <!-- クエスト名 -->
+        <TextView
+            android:id="@+id/quest_view_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:text="クエスト名"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <!-- クエストタイプ：「Battle」 or 「Story」 -->
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/quest_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:background="@drawable/drawable_quest_type"
+            android:text="Battle"
+            app:gradientStart="#fffafa"
+            app:gradientEnd="#ffd700"
+            android:shadowColor="#ffd700"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:orientation="horizontal">
+
+            <!-- クエスト条件：「3人パーティで戦闘」や「1体以上AIを使用して戦闘」等 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+            <com.lightfire.gradienttextcolor.GradientTextView
+                android:id="@+id/quest_constraint_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="制限"
+                android:background="@drawable/drawable_quest_constraint"
+                app:gradientStart="#fffafa"
+                app:gradientEnd="#ffd700"
+                android:shadowColor="#ffd700"
+                android:shadowDx="1.5"
+                android:shadowDy="1.5"
+                android:shadowRadius="1.5"
+                android:padding="8dp"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/quest_constraint"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="クエスト条件詳細"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+            <!-- クリア条件：「誰も戦闘不能にならずにクリア」や「ボスを倒す」等 -->
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/victory_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_off_background"
+                android:focusable="false"
+                android:text="クリア条件"
+                android:padding="8dp"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

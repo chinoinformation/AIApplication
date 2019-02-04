@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".start.MenuActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical"
+            android:background="#ffffff">
+
+            <TextView
+                android:id="@+id/menu_text"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="@string/menu"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/data_repair"
+                android:layout_margin="12dp"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="データ修復" />
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/data_reset"
+                android:layout_margin="12dp"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="データリセット" />
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/mail"
+                android:layout_margin="12dp"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="ユーザ情報" />
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/user_information"
+                android:layout_margin="12dp"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="その他" />
+
+
+        </LinearLayout>
+
+        <com.example.mitake.aiapplication.custom_layout.PushImageButton
+            android:id="@+id/attack_move_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:src="@drawable/button_close"
+            android:theme="@style/Theme.TranslucentBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            android:soundEffectsEnabled="false"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

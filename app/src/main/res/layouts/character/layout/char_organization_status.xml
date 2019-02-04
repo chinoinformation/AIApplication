@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:columnCount="2"
+        app:rowCount="3">
+
+        <LinearLayout
+            android:id="@+id/layout_char_organization_HP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginEnd="8dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/HP"/>
+
+            <TextView
+                android:id="@+id/char_organization_HP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/textHP"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_char_organization_defense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/defense"/>
+
+            <TextView
+                android:id="@+id/char_organization_defense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/textDefense"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_char_organization_MP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginEnd="8dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/MP"/>
+
+            <TextView
+                android:id="@+id/char_organization_MP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/textMP"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_char_organization_move"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/move"/>
+
+            <TextView
+                android:id="@+id/char_organization_move"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/textMove"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_char_organization_attack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginEnd="8dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/attack"/>
+
+            <TextView
+                android:id="@+id/char_organization_attack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/textAttack"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_char_organization_attack_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/attackRange"/>
+
+            <TextView
+                android:id="@+id/char_organization_attack_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/textAttackRange"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.GridLayout>
+
+</android.support.constraint.ConstraintLayout>

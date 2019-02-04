@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/drawable_quest_type"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/attack_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="4dp"
+            android:shadowColor="#ff4500"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:text=""
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:gradientEnd="#ff4500"
+            app:gradientStart="#fffaf0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="攻撃タイプ"
+                android:textColor="#ffff00"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/attack_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="#ffffff"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="使用タイプ"
+                android:textColor="#ffff00"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/char_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="#ffffff"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="効果"
+                android:textColor="#ffff00"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/effect_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="#ffffff"/>
+
+        </LinearLayout>
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/OK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp"
+                android:padding="4dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:background="@drawable/drawable_quest_constraint"
+                android:text="@string/OK"
+                android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

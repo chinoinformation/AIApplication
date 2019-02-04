@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+
+            <!-- 背景色 -->
+            <gradient
+                android:startColor="#ffffe0"
+                android:endColor="#f0e68c"
+                android:angle="270"
+                />
+
+            <!-- 角の丸み -->
+            <corners android:radius="6dp" />
+
+            <!-- 枠線 width:線の幅、color:線の色 -->
+            <stroke
+                android:width="2dp"
+                android:color="#ffffff" />
+        </shape>
+    </item>
+</selector>
+

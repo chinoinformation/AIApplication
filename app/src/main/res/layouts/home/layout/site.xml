@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/drawable_quest_type"
+    android:orientation="vertical">
+
+    <com.lightfire.gradienttextcolor.GradientTextView
+        android:id="@+id/text_thank_you"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="4dp"
+        android:shadowColor="#ff4500"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
+        android:shadowRadius="1.5"
+        android:text="@string/thank_you"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        app:gradientEnd="#ff4500"
+        app:gradientStart="#fffaf0" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_thank_you"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:textColor="#ffff00"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="16dp"
+        android:scrollbarSize="4dp"
+        android:scrollbarStyle="insideInset"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:scrollbarTrackVertical="@drawable/scrollbar_track"
+        android:fadeScrollbars="false"
+        android:fastScrollEnabled="true">
+
+        <TextView
+            android:id="@+id/site"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text=""
+            android:textColor="#ffffff"/>
+
+    </ScrollView>
+
+    <com.example.mitake.aiapplication.custom_layout.PushButton
+        android:id="@+id/OK"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
+        android:padding="4dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:background="@drawable/drawable_quest_constraint"
+        android:text="@string/OK"
+        android:soundEffectsEnabled="false"/>
+
+</LinearLayout>

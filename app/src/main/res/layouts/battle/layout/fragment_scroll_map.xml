@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/gamePlacesGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:columnCount="8"
+        app:orientation="vertical"
+        app:rowCount="8">
+
+    </android.support.v7.widget.GridLayout>
+
+    <ImageView
+        android:id="@+id/battleChar1_1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar1_2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar1_3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar1_4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar2_1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar2_2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar2_3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/battleChar2_4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <com.example.mitake.aiapplication.custom_layout.WaveAnimationLayout
+        xmlns:attr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/damage_text"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        attr:waveText=""
+        attr:waveTextColor="#f0f8ff"
+        attr:waveTextSize="28sp">
+    </com.example.mitake.aiapplication.custom_layout.WaveAnimationLayout>
+
+</android.support.constraint.ConstraintLayout>

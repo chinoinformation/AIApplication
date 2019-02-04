@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".start.OpeningActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"/>
+
+    <com.example.mitake.aiapplication.custom_layout.start.UpTextView
+        android:id="@+id/customTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:background="#000000"
+        android:padding="20dp"
+        android:text=""
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:lineSpacingExtra="15sp"
+        android:letterSpacing="0.15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</android.support.constraint.ConstraintLayout>

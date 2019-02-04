@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".quest.PracticeActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_quest_practice"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/main_char"
+        android:layout_width="249dp"
+        android:layout_height="320dp"
+        android:scaleType="center" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/text_dojo"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/background1"
+            android:gravity="center"
+            android:shadowColor="#00ff7f"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:text="@string/dojo"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:gradientEnd="#00ff7f"
+            app:gradientStart="#fffafa" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_quest1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/enemy_num" />
+
+                    <NumberPicker
+                        android:id="@+id/numberPicker_enemy"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_quest1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/turn_num" />
+
+                    <NumberPicker
+                        android:id="@+id/numberPicker_turn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_quest1"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:layout_margin="4dp"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="@string/enemy_type" />
+
+                        <com.example.mitake.aiapplication.custom_layout.PushButton
+                            android:id="@+id/detail_AI"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:text="@string/detail_AI"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/drawable_quest_story_background"/>
+
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/enemy_type"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <RadioButton
+                            android:id="@+id/RadioButton1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="@string/enemy_type_strongAI"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/RadioButtoni2"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="@string/enemy_type_weakAI"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/RadioButton3"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="@string/enemy_type_manual"
+                            android:textSize="10sp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.github.library.bubbleview.BubbleTextView
+                        android:id="@+id/main_char_speech"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center_vertical"
+                        android:padding="8dp"
+                        android:layout_margin="6dp"
+                        android:text="@string/char_speech1"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp"
+                        app:bubbleColor="#7EC0EE"
+                        app:arrowWidth="15dp"
+                        app:arrowHeight="25dp"
+                        app:arrowPosition="14dp"
+                        app:arrowLocation="bottom"
+                        app:arrowCenter="true"
+                        />
+
+                    <ImageView
+                        android:id="@+id/char_position"
+                        android:layout_width="249dp"
+                        android:layout_height="320dp"
+                        android:layout_below="@id/main_char_speech"
+                        android:layout_marginTop="40dp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="center" />
+
+                </RelativeLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded">
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/start_quest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_off_background"
+                android:drawableTop="@drawable/icon_battle"
+                android:padding="4dp"
+                android:text="@string/start_quest"
+                android:textColor="#ff0000"
+                android:textStyle="bold"
+                android:soundEffectsEnabled="false"/>
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/back_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/button_off_background"
+                android:drawableTop="@drawable/icon_off_home"
+                android:padding="4dp"
+                android:text="@string/home"
+                android:textColor="@color/colorIcon"
+                android:textStyle="bold"
+                android:soundEffectsEnabled="false"/>
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/back_world"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/button_off_background"
+                android:drawableTop="@drawable/icon_back"
+                android:padding="4dp"
+                android:text="@string/back"
+                android:textColor="@color/colorIcon"
+                android:textStyle="bold"
+                android:soundEffectsEnabled="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

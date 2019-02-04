@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".character.CharStatusFragment">
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:columnCount="3"
+        app:layout_gravity="center"
+        app:layout_rowWeight="1"
+        app:rowCount="2"
+        >
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/char_window"
+            app:layout_columnWeight="1"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="0"
+            app:layout_rowSpan="2">
+
+            <ImageView
+                android:id="@+id/char_img"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:soundEffectsEnabled="false"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/char_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            app:layout_gravity="center"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <com.example.mitake.aiapplication.custom_layout.character.CustomCharOrganizationStatus
+            android:id="@+id/custom_char_organization_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_gravity="center"
+            app:layout_columnWeight="1"
+            app:layout_column="1"
+            app:layout_row="1">
+
+        </com.example.mitake.aiapplication.custom_layout.character.CustomCharOrganizationStatus>
+
+        <ToggleButton
+            android:id="@+id/ai_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/togglebutton_background"
+            android:textColor="@drawable/toggle_color"
+            android:textOff="@string/not_apply_ai"
+            android:textOn="@string/apply_ai"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:scaleType="centerCrop"
+            android:textAllCaps="false"
+            app:layout_columnWeight="1"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="0"
+            app:layout_rowSpan="2"
+            android:soundEffectsEnabled="false"/>
+
+    </android.support.v7.widget.GridLayout>
+
+
+</FrameLayout>

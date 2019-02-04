@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- layer-listでitemを重ねられます。 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- item0 -->
+    <item>
+        <!-- shape:rectangle(=四角形) -->
+        <shape android:shape="rectangle">
+            <!-- item①に対して2dp内側に入る。 -->
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
+            <!-- 色 -->
+            <solid android:color="#ffd700" />
+
+            <!-- 角の丸み -->
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+
+    <!-- item① -->
+    <item>
+        <!-- shape:rectangle(=四角形) -->
+        <shape android:shape="rectangle">
+            <!-- item②に対して2dp内側に入る。 -->
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
+            <!-- 色 -->
+            <solid android:color="#000000" />
+
+            <!-- 角の丸み -->
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+
+    <!-- item② -->
+    <item>
+        <!-- shape:rectangle(=四角形) -->
+        <shape android:shape="rectangle">
+            <!-- item③に対して2dp内側に入る。 -->
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
+            <!-- 色:白 -->
+            <solid android:color="#ffd700" />
+
+            <!-- 角の丸み -->
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+
+    <!-- item③ -->
+    <item>
+        <!-- shape:rectangle(=四角形) -->
+        <shape android:shape="rectangle">
+            <!-- 色 -->
+            <solid android:color="#000000"/>
+
+            <!-- 角の丸み -->
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+
+</layer-list>
+

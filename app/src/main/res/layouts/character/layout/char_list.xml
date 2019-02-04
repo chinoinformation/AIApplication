@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/char_name"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:textColor="#000"
+            android:layout_margin="4dp"
+            android:padding="4dp"
+            android:maxLines="1"
+            android:text="Sample"/>
+
+        <ImageView
+            android:id="@+id/char_image"
+            android:layout_width="60dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

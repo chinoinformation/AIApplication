@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".home.MainButtonFragment">
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:columnCount="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:rowCount="1">
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/main_home_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/home"
+            android:gravity="center|bottom"
+            android:drawableTop="@drawable/icon_off_home"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorIcon"
+            app:layout_columnWeight="1"
+            android:background="@drawable/button_off_background"
+            app:layout_gravity="fill"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/main_char_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/home_char"
+            android:gravity="center|bottom"
+            android:drawableTop="@drawable/icon_off_char"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorIcon"
+            app:layout_columnWeight="1"
+            android:background="@drawable/button_off_background"
+            app:layout_gravity="fill"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/main_ai_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/ai"
+            android:gravity="center|bottom"
+            android:drawableTop="@drawable/icon_off_ai"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorIcon"
+            android:background="@drawable/button_off_background"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/main_menu_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/menu"
+            android:gravity="center|bottom"
+            android:drawableTop="@drawable/icon_off_menu"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorIcon"
+            android:background="@drawable/button_off_background"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            android:soundEffectsEnabled="false"/>
+
+    </android.support.v7.widget.GridLayout>
+
+</android.support.constraint.ConstraintLayout>

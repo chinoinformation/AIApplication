@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".quest.MainQuestActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/background_main_quest"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/background_main_quest"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/text_main_quest"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:text="@string/main_quest"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:gradientStart="#fffafa"
+            app:gradientEnd="#00ff7f"
+            android:shadowColor="#00ff7f"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:background="@drawable/background1"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/listview_main_quest"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:clipToPadding="false"
+                android:divider="@null"
+                android:dividerHeight="16dp"
+                android:scrollbarSize="4dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+                android:scrollbarTrackVertical="@drawable/scrollbar_track"
+                android:fadeScrollbars="false"
+                android:padding="16dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded">
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/back_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="@string/home"
+                android:drawableTop="@drawable/icon_off_home"
+                android:textColor="@color/colorIcon"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_off_background"
+                android:textStyle="bold"
+                android:soundEffectsEnabled="false"/>
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/back_world"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:padding="4dp"
+                android:text="@string/back"
+                android:drawableTop="@drawable/icon_back"
+                android:textColor="@color/colorIcon"
+                android:background="@drawable/button_off_background"
+                android:textStyle="bold"
+                android:soundEffectsEnabled="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

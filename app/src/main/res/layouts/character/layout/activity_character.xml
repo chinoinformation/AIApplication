@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".character.CharacterActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/background_char_select"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/background_char"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/main_text_char"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/background1"
+            android:text="@string/character"
+            android:gravity="center"
+            app:gradientStart="#fffafa"
+            app:gradientEnd="#66dddd"
+            android:textSize="30sp"
+            android:shadowColor="#66dddd"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:textStyle="bold" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/char_tabs"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabBackground="@drawable/tab_color_selector"
+            style="@style/ToolTabStyle"
+            >
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_char_organization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/organization" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_char_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/charList" />
+
+        </android.support.design.widget.TabLayout>
+
+
+        <com.example.mitake.aiapplication.custom_layout.NonSwipeableViewPager
+            android:id="@+id/char_container"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <LinearLayout
+            android:id="@+id/char_main_button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

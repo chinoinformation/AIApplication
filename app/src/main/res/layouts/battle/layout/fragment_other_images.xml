@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/layout_start_or_finish"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/sword1"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/sword2"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_centerInParent="true" />
+
+        <com.lightfire.gradienttextcolor.GradientTextView
+            android:id="@+id/start_or_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:shadowColor="#ff4500"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+            android:shadowRadius="1.5"
+            android:text=""
+            android:textSize="32sp"
+            android:textStyle="bold|italic"
+            app:gradientEnd="#ff4500"
+            app:gradientStart="#fffaf0" />
+
+        <ImageView
+            android:id="@+id/dummy_image"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

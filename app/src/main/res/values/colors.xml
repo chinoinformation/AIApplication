@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorIcon">#4169e1</color>
+
+    <color name="tab_select_color">#FFFFFF</color>
+    <color name="tab_indicator_color">#00FFFFFF</color>
+
+    <color name="organization_char1_color1">#ffa500</color>
+    <color name="organization_char1_color2">#77ffa500</color>
+    <color name="organization_char2_color1">#00BFFF</color>
+    <color name="organization_char2_color2">#7700BFFF</color>
+    <color name="organization_char3_color1">#00FF7F</color>
+    <color name="organization_char3_color2">#7700FF7F</color>
+    <color name="organization_char4_color1">#ee82ee</color>
+    <color name="organization_char4_color2">#77ee82ee</color>
+
+    <color name="player1_color1">#00BFFF</color>
+    <color name="player1_color2">#7000BFFF</color>
+    <color name="player2_color1">#FF4500</color>
+    <color name="player2_color2">#70FF4500</color>
+</resources>

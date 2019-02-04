@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".battle.BattleFinishActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:textSize="48sp"
+            android:gravity="center"
+            android:textColor="#95CC1F"
+            android:shadowColor="#BAFF26"
+            android:shadowRadius="10.0"
+            android:shadowDx="0.0"
+            android:shadowDy="0.0"
+            android:text="@string/result" />
+
+        <LinearLayout
+            android:id="@+id/text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <TextView
+                android:id="@+id/player1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:textColor="@color/player1_color1"
+                android:text="@string/player1" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:text="@string/vs" />
+
+            <TextView
+                android:id="@+id/player2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:textColor="@color/player2_color1"
+                android:text="@string/player2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/char_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <TextView
+                android:id="@+id/player1_char"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:textColor="@color/player1_color1"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/text_char"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:text="@string/char_num" />
+
+            <TextView
+                android:id="@+id/player2_char"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:textColor="@color/player2_color1"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/HP_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <TextView
+                android:id="@+id/player1_HP"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:textColor="@color/player1_color1"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/text_HP"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:text="@string/sumHP" />
+
+            <TextView
+                android:id="@+id/player2_HP"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:textColor="@color/player2_color1"
+                android:text="" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/winner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:textColor="#95CC1F"
+            android:textStyle="bold|italic"
+            android:text="" />
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="6dp"
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="@string/next"
+            android:soundEffectsEnabled="false" />
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- oneshot="true":描画１回のみ、oneshot="false"：繰り返し -->
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <!-- duration：表示間隔[msec]-->
+    <item android:drawable="@drawable/char811" android:duration="120" />
+    <item android:drawable="@drawable/char812" android:duration="120" />
+    <item android:drawable="@drawable/char813" android:duration="120" />
+    <item android:drawable="@drawable/char814" android:duration="120" />
+    <item android:drawable="@drawable/char815" android:duration="120" />
+    <item android:drawable="@drawable/char816" android:duration="120" />
+    <item android:drawable="@drawable/char817" android:duration="120" />
+    <item android:drawable="@drawable/char818" android:duration="120" />
+</animation-list>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.HomeActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/home_background"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/background_home"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/main_char"
+        android:layout_width="311dp"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/home_background"
+        app:layout_constraintVertical_bias="0.588" />
+
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/home_main_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.829">
+
+        <ImageView
+            android:id="@+id/quest_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/quest_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/drawable_quest"
+            android:drawableTop="@drawable/icon_battle"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/home_quest"
+            android:textColor="#ff0000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/home_main_button"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:orientation="horizontal"
+        android:background="@drawable/background_quest1"
+        android:weightSum="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/drawable_quest_story_background">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="1dp"
+                android:text="@string/user_rank"
+                android:padding="4dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"/>
+
+            <TextView
+                android:id="@+id/user_rank"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="1dp"
+                android:text="1"
+                android:padding="4dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="AIAI 開発チーム"
+            android:textStyle="bold"
+            android:textColor="#ffffff"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/drawable_quest_battle_background">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="1dp"
+                android:text="@string/pvp_rank"
+                android:padding="4dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"/>
+
+            <TextView
+                android:id="@+id/pvp_rank"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="1dp"
+                android:text="SSS"
+                android:padding="4dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

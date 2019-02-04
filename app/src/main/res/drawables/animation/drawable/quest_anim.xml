@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- oneshot="true":描画１回のみ、oneshot="false"：繰り返し -->
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <!-- duration：表示間隔[msec]-->
+    <item android:drawable="@drawable/quest_anim1" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim2" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim3" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim4" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim5" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim6" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim7" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim8" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim9" android:duration="100" />
+    <item android:drawable="@drawable/quest_anim10" android:duration="100" />
+</animation-list>

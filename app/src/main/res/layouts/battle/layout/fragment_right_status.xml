@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="170dp"
+    android:layout_height="84dp">
+
+    <ImageView
+        android:id="@+id/BackGround"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_status"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
+
+    <LinearLayout
+        android:layout_width="170dp"
+        android:layout_height="84dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.lightfire.gradienttextcolor.GradientTextView
+                android:id="@+id/playertext1"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:text="@string/player1"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:shadowColor="#00bfff"
+                android:shadowDx="1.5"
+                android:shadowDy="1.5"
+                android:shadowRadius="1.5"
+                app:gradientEnd="#00bfff"
+                app:gradientStart="#fffaf0"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_marginStart="2dp">
+
+                <TextView
+                    android:id="@+id/player1HP"
+                    android:layout_width="match_parent"
+                    android:layout_height="13dp"
+                    android:gravity="left|start"
+                    android:text="@string/battle_HP"
+                    android:textColor="#ffffff"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.5"
+                    android:shadowRadius="7.0"/>
+
+                <ProgressBar
+                    android:id="@+id/hpProgressBar1"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:progressDrawable="@drawable/progressbar1"
+                    android:layout_below="@+id/player1HP" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.lightfire.gradienttextcolor.GradientTextView
+                android:id="@+id/playertext2"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:text="@string/player2"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:shadowColor="#ff4500"
+                android:shadowDx="1.5"
+                android:shadowDy="1.5"
+                android:shadowRadius="1.5"
+                app:gradientEnd="#ff4500"
+                app:gradientStart="#fffaf0"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_marginStart="2dp">
+
+                <TextView
+                    android:id="@+id/player2HP"
+                    android:layout_width="match_parent"
+                    android:layout_height="13dp"
+                    android:gravity="left|start"
+                    android:text="@string/battle_HP"
+                    android:textColor="#ffffff"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.5"
+                    android:shadowRadius="7.0"/>
+
+                <ProgressBar
+                    android:id="@+id/hpProgressBar2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:progressDrawable="@drawable/progressbar1"
+                    android:layout_below="@+id/player2HP"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

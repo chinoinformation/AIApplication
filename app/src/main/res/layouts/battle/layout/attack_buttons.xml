@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:rowCount="4"
+        >
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/normal_attack_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            app:layout_columnWeight="1"
+            android:background="@drawable/background_attack_button"
+            android:text="@string/normal_attack_button"
+            app:layout_gravity="fill"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/special_attack_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_columnWeight="1"
+            android:background="@drawable/background_attack_button"
+            android:textColor="#ffffff"
+            android:text="@string/special_attack_button"
+            app:layout_gravity="fill"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/attack_move_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_columnWeight="1"
+            android:background="@drawable/background_button"
+            android:text="@string/move_button"
+            app:layout_gravity="fill"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/attack_end_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_columnWeight="1"
+            android:background="@drawable/background_button"
+            android:text="@string/end_button"
+            app:layout_gravity="fill"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+    </android.support.v7.widget.GridLayout>
+
+</android.support.constraint.ConstraintLayout>

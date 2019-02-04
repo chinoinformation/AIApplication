@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- layer-listでitemを重ねられます。 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- item① -->
+    <item>
+        <!-- shape:rectangle(=四角形) -->
+        <shape android:shape="rectangle">
+            <!-- item②に対して2dp内側に入る。 -->
+            <padding
+                android:bottom="2dp"
+                android:left="0dp"
+                android:right="0dp"
+                android:top="2dp" />
+            <!-- 色:パープル -->
+            <solid android:color="#ffd700" />
+        </shape>
+    </item>
+
+    <!-- item② -->
+    <item>
+        <!-- shape:rectangle(=四角形) -->
+        <shape android:shape="rectangle">
+            <!-- item③に対して2dp内側に入る。 -->
+            <padding
+                android:bottom="2dp"
+                android:top="2dp" />
+            <!-- 色:白 -->
+            <solid android:color="#ffffff" />
+        </shape>
+    </item>
+
+    <!-- item③ -->
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" >
+            <!-- shape:rectangle(=四角形) -->
+            <gradient
+                android:angle="90"
+                android:endColor="#483D8B"
+                android:startColor="#191970"
+                />
+        </shape>
+    </item>
+
+</layer-list>

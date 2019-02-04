@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_quest1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="16dp">
+
+                    <EditText
+                        android:id="@+id/user_name"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:padding="8dp"
+                        android:maxLength="10"
+                        android:background="@drawable/drawable_quest_constraint"
+                        android:text="AIAI開発チーム"
+                        android:cursorVisible="false"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/user_rank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:background="@drawable/drawable_quest_battle_background"
+                        android:text="RANK 1"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="16dp">
+
+                    <ImageView
+                        android:id="@+id/main_char"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp" />
+
+                    <android.support.v7.widget.GridLayout
+                        android:layout_width="0dp"
+                        android:layout_height="150dp"
+                        android:layout_weight="1"
+                        app:columnCount="2"
+                        app:rowCount="2">
+
+                        <ImageView
+                            android:id="@+id/char1"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="16dp"
+                            app:layout_columnWeight="1"
+                            app:layout_rowWeight="1"
+                            />
+
+                        <ImageView
+                            android:id="@+id/char2"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="16dp"
+                            app:layout_columnWeight="1"
+                            app:layout_rowWeight="1"
+                            />
+
+                        <ImageView
+                            android:id="@+id/char3"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="16dp"
+                            app:layout_columnWeight="1"
+                            app:layout_rowWeight="1"
+                            />
+
+                        <ImageView
+                            android:id="@+id/char4"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="16dp"
+                            app:layout_columnWeight="1"
+                            app:layout_rowWeight="1"
+                            />
+
+
+                    </android.support.v7.widget.GridLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16sp"
+                    android:text="コメント（30字まで）"
+                    android:textColor="#000000"/>
+
+                <EditText
+                    android:id="@+id/comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="16dp"
+                    android:padding="8dp"
+                    android:gravity="left"
+                    android:maxLength="30"
+                    android:background="@drawable/drawable_quest_story_background"
+                    android:text="@string/default_comment"
+                    android:cursorVisible="false"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="@string/back"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

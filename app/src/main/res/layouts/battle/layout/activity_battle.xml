@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".battle.BattleActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_battle_main"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:orientation="horizontal"
+            android:background="#ffffff"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <fragment
+                android:id="@+id/left_status"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
+                android:name="com.example.mitake.aiapplication.battle.view.LeftStatusFragment"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_left_status"/>
+
+            <fragment
+                android:id="@+id/right_status"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
+                android:name="com.example.mitake.aiapplication.battle.view.RightStatusFragment"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_right_status"/>
+
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/char_images"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:name="com.example.mitake.aiapplication.battle.view.ChangeImagesFragment"
+            tools:layout="@layout/fragment_change_images"/>
+
+        <fragment
+            android:id="@+id/other_images"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:name="com.example.mitake.aiapplication.battle.view.OtherItemsFragment"
+            tools:layout="@layout/fragment_other_items"/>
+
+        <TextView
+            android:id="@+id/text_message"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/background_message"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:singleLine="false"
+            android:text=""
+            android:textStyle="bold"/>
+
+        <com.example.mitake.aiapplication.custom_layout.VScroll
+            android:id="@+id/vScroll"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none"
+            android:fillViewport="true"
+            android:layout_margin="2dp">
+
+            <com.example.mitake.aiapplication.custom_layout.HScroll
+                android:id="@+id/hScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <fragment
+                    android:id="@+id/scroll_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.example.mitake.aiapplication.battle.view.ScrollMapFragment"
+                    tools:layout="@layout/fragment_scroll_map"/>
+
+            </com.example.mitake.aiapplication.custom_layout.HScroll>
+
+        </com.example.mitake.aiapplication.custom_layout.VScroll>
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/others"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.example.mitake.aiapplication.battle.view.OtherImagesFragment"
+        tools:layout="@layout/fragment_other_images"/>
+
+</android.support.constraint.ConstraintLayout>
