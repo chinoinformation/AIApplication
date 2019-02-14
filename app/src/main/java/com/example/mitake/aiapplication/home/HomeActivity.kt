@@ -27,6 +27,8 @@ class HomeActivity : AppCompatActivity(){
     private var mainChar: ImageView? = null
     private var quest: ImageView? = null
     private var questText: TextView? = null
+    private var tutorialText: TextView? = null
+
 
     /** BGM再生 */
     private var bgmId = R.raw.bgm_home
@@ -58,6 +60,18 @@ class HomeActivity : AppCompatActivity(){
             questText!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
             intent.putExtra("Name", "Quest")
+            intent.putExtra("musicId", bgmId)
+            startActivity(intent)
+            finish()
+        }
+
+        tutorialText = findViewById(R.id.tutorial_text)
+        tutorialText!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        tutorialText!!.setOnClickListener {
+            effectBgm!!.play("button")
+            tutorialText!!.setOnClickListener(null)
+            val intent = Intent(this, IntentActivity::class.java)
+            intent.putExtra("Name", "TutorialStory")
             intent.putExtra("musicId", bgmId)
             startActivity(intent)
             finish()

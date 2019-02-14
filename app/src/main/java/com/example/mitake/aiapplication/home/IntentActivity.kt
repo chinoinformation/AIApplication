@@ -13,6 +13,7 @@ import com.example.mitake.aiapplication.quest.*
 import com.example.mitake.aiapplication.start.MainActivity
 import com.example.mitake.aiapplication.start.OpeningActivity
 import com.example.mitake.aiapplication.start.OpeningStoryActivity
+import com.example.mitake.aiapplication.tutorial.TutorialStoryActivity
 
 class IntentActivity : AppCompatActivity() {
 
@@ -106,12 +107,21 @@ class IntentActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-                // TutorialActivity に遷移させる
+
+                    // TutorialStoryActivity に遷移させる
+                    "TutorialStory" -> {
+                        val intent = Intent(this, TutorialStoryActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                // PracticeActivity に遷移させる
                     "Practice" -> {
                         val intent = Intent(this, PracticeActivity::class.java)
                         startActivity(intent)
                         finish()
                     }
+
+
                 // BattleActivity に遷移させる
                     "Battle" -> {
                         // 画面遷移

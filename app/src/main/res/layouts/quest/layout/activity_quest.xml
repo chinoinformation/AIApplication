@@ -46,10 +46,10 @@
                     android:layout_height="120dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:scaleType="centerCrop"
                     android:background="@null"
-                    android:src="@drawable/background_quest_home"
-                    android:soundEffectsEnabled="false"/>
+                    android:scaleType="centerCrop"
+                    android:soundEffectsEnabled="false"
+                    android:src="@drawable/background_quest_home" />
 
                 <TextView
                     android:id="@+id/text_quest_home"
