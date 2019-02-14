@@ -339,6 +339,7 @@ class TutorialStoryActivity : AppCompatActivity() {
     }
 
     /** 「はい」「いいえ」ボタンのリスナーを設定 */
+/*
     private fun selectButton(img1: ImageView, img2: ImageView){
         yesButton!!.alpha = 1f
         noButton!!.alpha = 1f
@@ -368,7 +369,7 @@ class TutorialStoryActivity : AppCompatActivity() {
             newStr = "「本当にこいつでいいんだな？」"
         }
     }
-
+ */
     /** タッチしたメインキャラクター以外のキャラクターを暗く表示させる関数 */
     private fun selectMainChar(img: ImageView){
         if (img == mainChar1!!){
