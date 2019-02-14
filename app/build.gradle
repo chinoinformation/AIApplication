@@ -41,6 +41,7 @@ android {
                     '/src/main/res/drawables/effect',
                     '/src/main/res/drawables/icon',
                     '/src/main/res/drawables/start',
+                    '/src/main/res/drawables/tutorial',
                     '/src/main/res/drawables',
                     '/src/main/res/layouts/ai',
                     '/src/main/res/layouts/battle',
@@ -48,6 +49,7 @@ android {
                     '/src/main/res/layouts/home',
                     '/src/main/res/layouts/quest',
                     '/src/main/res/layouts/start',
+                    '/src/main/res/layouts/tutorial',
                     '/src/main/res/layouts',
                     '/src/main/res'
             ]

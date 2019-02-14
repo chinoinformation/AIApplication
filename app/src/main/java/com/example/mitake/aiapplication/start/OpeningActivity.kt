@@ -14,7 +14,6 @@ import com.example.mitake.aiapplication.custom_layout.start.UpTextView
 import com.example.mitake.aiapplication.home.IntentActivity
 import kotlinx.android.synthetic.main.activity_opening.*
 
-@Suppress("DEPRECATION")
 class OpeningActivity : AppCompatActivity() {
 
     /**

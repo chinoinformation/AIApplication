@@ -60,6 +60,9 @@
             android:name=".start.OpeningStoryActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".tutorial.TutorialStoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".home.SettingActivity"
             android:screenOrientation="portrait" />
         <activity
