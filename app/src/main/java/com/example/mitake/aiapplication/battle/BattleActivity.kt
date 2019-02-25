@@ -112,7 +112,7 @@ class BattleActivity : AppCompatActivity(){
                             char21Place, char22Place, char23Place, char24Place)
 
     /** AI */
-    private var enemyAIType: String = "DeepAI"
+    private var enemyAIType: String = "WeakAI"
     var aiMovePlace: Place? = null
     var AIModel: WeakAI? = null
     var applyAI: MutableList<Boolean>
