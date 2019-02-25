@@ -22,7 +22,7 @@ class CustomBattleTutorialAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm
     }
 
     override fun getCount(): Int {
-        // Show 2 total pages.
+        // Show 4 total pages.
         return 4
     }
 }

@@ -49,7 +49,7 @@ class OtherImagesFragment : Fragment() {
     }
 
     /** 戦闘開始アニメーション画像の初期位置設定 */
-    @SuppressLint("ResourceType", "SetTextI18n")
+    @SuppressLint("ResourceType")
     private fun battleStartAnimationInit(){
         val swordAnim1 = AnimationUtils.loadAnimation(context!!, R.animator.sword_left_init)
         val swordAnim2 = AnimationUtils.loadAnimation(context!!, R.animator.sword_right_init)
@@ -57,7 +57,7 @@ class OtherImagesFragment : Fragment() {
         textStartFinish!!.startAnimation(textAnim)
         sword1!!.startAnimation(swordAnim1)
         sword2!!.startAnimation(swordAnim2)
-        textStartFinish!!.text = "BATTLE START"
+        textStartFinish!!.text = resources.getString(R.string.battle_start)
         Glide.with(context!!).load(R.drawable.sword1).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).into(sword1!!)
         Glide.with(context!!).load(R.drawable.sword2).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).into(sword2!!)
     }
@@ -92,9 +92,9 @@ class OtherImagesFragment : Fragment() {
     }
 
     /** バトル終了アニメーション */
-    @SuppressLint("SetTextI18n", "ResourceType")
+    @SuppressLint("ResourceType")
     fun battleEndAnimation(): List<Animation> {
-        textStartFinish!!.text = "BATTLE FINISH"
+        textStartFinish!!.text = resources.getString(R.string.battle_finish)
         val swordAnim1 = AnimationUtils.loadAnimation(context!!, R.animator.sword_left_in)
         val swordAnim2 = AnimationUtils.loadAnimation(context!!, R.animator.sword_right_in)
         return listOf(swordAnim1, swordAnim2)

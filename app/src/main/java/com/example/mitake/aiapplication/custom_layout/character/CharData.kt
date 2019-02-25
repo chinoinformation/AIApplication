@@ -10,5 +10,4 @@ class CharData {
     var defense: String = "0"
     var move: String = "0"
     var attackRange: String = "0"
-
 }

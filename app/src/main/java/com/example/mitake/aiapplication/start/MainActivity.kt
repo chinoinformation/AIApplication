@@ -5,8 +5,10 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -22,7 +24,9 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import android.media.SoundPool
+import android.view.KeyEvent
 import com.example.mitake.aiapplication.bgm.EffectList
+import com.example.mitake.aiapplication.data.DataManagement
 import java.util.concurrent.ScheduledFuture
 
 
@@ -47,9 +51,15 @@ class MainActivity : AppCompatActivity() {
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
 
     /** スクリーンタッチ可能かどうかの判定 */
     private var canTouchScreen = true
+
+    /** プリファレンス */
+    private var data: DataManagement? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,7 +165,7 @@ class MainActivity : AppCompatActivity() {
             canTouchScreen = false
             effectBgm!!.play("start")
             val intent = Intent(this, IntentActivity::class.java)
-            intent.putExtra("Name", "Main")
+            intent.putExtra("Name", "Opening")
             intent.putExtra("musicId", bgmId)
             startActivity(intent)
             overridePendingTransition(0, 0)
@@ -164,8 +174,39 @@ class MainActivity : AppCompatActivity() {
         return super.onTouchEvent(event)
     }
 
+    /** 音量設定 */
+    @Suppress("DEPRECATED_IDENTITY_EQUALS")
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onResume() {
         super.onResume()
+
         // プレイヤーの処理
         bgmId = R.raw.bgm_start
         val intent = Intent(applicationContext, MyService::class.java)
@@ -176,8 +217,13 @@ class MainActivity : AppCompatActivity() {
             startService(intent)
             bgmFlag = 1
 
+            // AudioManagerを取得する
+            am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            // 最大音量値を取得
+            mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             // SoundPool の設定
-            Thread.sleep(1000)
             audioAttributes = AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
@@ -186,7 +232,12 @@ class MainActivity : AppCompatActivity() {
                     .setAudioAttributes(audioAttributes)
                     .setMaxStreams(2)
                     .build()
+
             effectBgm = EffectList(applicationContext, soundPool)
+
+            // プリファレンスの呼び出し
+            data = DataManagement(this)
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.getList("start")
             effectBgm!!.getList("other_button")
         } else {
@@ -215,6 +266,10 @@ class MainActivity : AppCompatActivity() {
         mLblMeasuring!!.setBackgroundResource(0)
         task = null
         mScheduledExecutor = null
+        data = null
+        am = null
+        mVol = 0f
+        ringVolume = 0f
         Handler().postDelayed({
             effectBgm!!.release()
         }, 2000)

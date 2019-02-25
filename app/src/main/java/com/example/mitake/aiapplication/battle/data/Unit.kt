@@ -13,7 +13,7 @@ class Unit(status: Status) {
     var pinchPower = 1.0
 
     /** ダメージ計算式 */
-    fun damage(unit: Unit, attackPlace: Place, defensePlace: Place, mapType: Array<Array<Int>>): List<Any> {
+    fun damage(unit: Unit, attackPlace: Place, defensePlace: Place, mapType: Array<Array<Int>>): Pair<Double, String> {
         // 基本ダメージを計算
         // 攻撃力から得られた値から防御力を引き算
         // ダメージがマイナスにならないよう調整
@@ -32,7 +32,7 @@ class Unit(status: Status) {
                     3 -> 0.10
                     else -> 0.0
                 }
-        val baseDamage = Math.max((unit.Attack * (1.0 + attackRate) - Defence * (1.0 + defenseRate)), 0.0)
+        val baseDamage = Math.max((unit.Attack * unit.pinchPower * (1.0 + attackRate) - Defence * (1.0 + defenseRate)), 0.0)
         // 乱数によるダメージばらつき
         val variance = Math.random() - 0.5
         // 乱数による補正値を算出
@@ -66,8 +66,8 @@ class Unit(status: Status) {
         // 防御型のみ特殊攻撃後のダメージ軽減
         val specialDefense: Double = if (SP == 1) 30.0 else 0.0
         // 最終ダメージ定義
-        val damage = Math.max(((baseDamage + varianceDamage) * rate)*unit.pinchPower - specialDefense, 0.0)
-        return listOf(damage, message)
+        val damage = Math.max(((baseDamage + varianceDamage) * rate) - specialDefense, 0.0)
+        return Pair(damage, message)
     }
 
     fun useSpecial(){

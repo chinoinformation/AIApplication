@@ -28,7 +28,7 @@ class OrganizationFragment : Fragment() {
         mViewPager!!.adapter = adapter
 
         // プリファレンスで初期ページを読み出し
-        data = DataManagement(this.context!!)
+        data = DataManagement(context!!)
         mViewPager!!.currentItem = data!!.readData("organization_page", "0")[0].toInt()
 
         val tabLayout = root.findViewById(R.id.indicator) as TabLayout

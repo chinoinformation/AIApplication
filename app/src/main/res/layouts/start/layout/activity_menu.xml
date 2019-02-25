@@ -13,6 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -22,54 +23,64 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:orientation="vertical"
-            android:background="#ffffff">
+            android:background="@drawable/drawable_quest_type">
 
-            <TextView
-                android:id="@+id/menu_text"
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+            <com.lightfire.gradienttextcolor.GradientTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:gravity="center"
                 android:layout_gravity="center"
+                android:padding="4dp"
+                android:shadowColor="#ff4500"
+                android:shadowDx="1.5"
+                android:shadowDy="1.5"
+                android:shadowRadius="1.5"
                 android:text="@string/menu"
-                android:textColor="#000000"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:textSize="20sp" />
+                app:gradientEnd="#ff4500"
+                app:gradientStart="#fffaf0" />
 
             <com.example.mitake.aiapplication.custom_layout.PushButton
                 android:id="@+id/data_repair"
-                android:layout_margin="12dp"
+                android:layout_margin="16dp"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
+                android:background="@drawable/button_off_background"
                 android:layout_gravity="center"
-                android:text="データ修復" />
+                android:text="データ修復"
+                android:soundEffectsEnabled="false"/>
 
             <com.example.mitake.aiapplication.custom_layout.PushButton
                 android:id="@+id/data_reset"
-                android:layout_margin="12dp"
+                android:layout_margin="16dp"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
+                android:background="@drawable/button_off_background"
                 android:layout_gravity="center"
-                android:text="データリセット" />
-
-            <com.example.mitake.aiapplication.custom_layout.PushButton
-                android:id="@+id/mail"
-                android:layout_margin="12dp"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:text="ユーザ情報" />
+                android:text="データリセット"
+                android:soundEffectsEnabled="false"/>
 
             <com.example.mitake.aiapplication.custom_layout.PushButton
                 android:id="@+id/user_information"
-                android:layout_margin="12dp"
+                android:layout_margin="16dp"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
+                android:background="@drawable/button_off_background"
                 android:layout_gravity="center"
-                android:text="その他" />
+                android:text="ユーザ情報"
+                android:soundEffectsEnabled="false"/>
+
+            <com.example.mitake.aiapplication.custom_layout.PushButton
+                android:id="@+id/site"
+                android:layout_margin="16dp"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:background="@drawable/button_off_background"
+                android:layout_gravity="center"
+                android:text="ライセンス"
+                android:soundEffectsEnabled="false"/>
 
 
         </LinearLayout>

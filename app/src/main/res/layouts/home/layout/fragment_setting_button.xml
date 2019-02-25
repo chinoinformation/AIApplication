@@ -22,7 +22,7 @@
             android:soundEffectsEnabled="false"/>
 
         <com.example.mitake.aiapplication.custom_layout.PushButton
-            android:id="@+id/setting"
+            android:id="@+id/audio"
             android:layout_width="220dp"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:textSize="16sp"
             android:background="@drawable/button_off_background"
-            android:text="設定変更"
+            android:text="音量設定"
             android:soundEffectsEnabled="false"/>
 
         <com.example.mitake.aiapplication.custom_layout.PushButton
@@ -54,7 +54,7 @@
             android:layout_gravity="center"
             android:textSize="16sp"
             android:background="@drawable/button_off_background"
-            android:text="その他"
+            android:text="ライセンス"
             android:soundEffectsEnabled="false"/>
 
     </LinearLayout>

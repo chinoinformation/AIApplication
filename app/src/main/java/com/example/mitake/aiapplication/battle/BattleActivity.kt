@@ -1,15 +1,19 @@
 package com.example.mitake.aiapplication.battle
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
+import android.util.Log
+import android.view.KeyEvent
 import android.view.MotionEvent
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -32,6 +36,12 @@ import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
+import com.squareup.okhttp.MediaType
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
+import com.squareup.okhttp.RequestBody
+import org.json.JSONObject
+import java.lang.ref.WeakReference
 
 
 @Suppress("DEPRECATION")
@@ -43,6 +53,9 @@ class BattleActivity : AppCompatActivity(){
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
 
     private val mHandler = Handler()
 
@@ -72,20 +85,20 @@ class BattleActivity : AppCompatActivity(){
     /** キャラチップ変数 */
     private var partyNum: Int = 0
     private var charId: MutableList<Int> = mutableListOf(1,5,9,13)
-    var numberList: MutableList<Int> = arrayListOf()
-    var imgList: MutableList<ImageView?> = arrayListOf()
-    private var bmpList: MutableList<MutableList<Int>> = arrayListOf()
+    var numberList: MutableList<Int> = mutableListOf()
+    var imgList: MutableList<ImageView?> = mutableListOf()
+    private var bmpList: MutableList<MutableList<Int>> = mutableListOf()
     var density: Float = 0f
 
     /** ユニットのステータス */
     private val notCharStatus = Status(0, 0, 0.0, 0.0, "")      // 空ステータス
-    var statusList: MutableList<Status> = arrayListOf()
-    var unitList: MutableList<Unit> = arrayListOf()
+    var statusList: MutableList<Status> = mutableListOf()
+    var unitList: MutableList<Unit> = mutableListOf()
 
     /** ユニットの場所管理変数 */
     val notCharPlace = Place(boardSize, boardSize, Player.NONE)     // 空位置リスト
-    private var startXList: MutableList<Int> = arrayListOf()
-    private var startYList: MutableList<Int> = arrayListOf()
+    var startXList: MutableList<Int> = mutableListOf()
+    var startYList: MutableList<Int> = mutableListOf()
     private val char11Place = Place(1,7,Player.Player1)
     private val char12Place = Place(2,5,Player.Player1)
     private val char13Place = Place(5,5,Player.Player1)
@@ -99,7 +112,9 @@ class BattleActivity : AppCompatActivity(){
                             char21Place, char22Place, char23Place, char24Place)
 
     /** AI */
-    private var AIModel: WeakAI? = null
+    private var enemyAIType: String = "DeepAI"
+    var aiMovePlace: Place? = null
+    var AIModel: WeakAI? = null
     var applyAI: MutableList<Boolean>
             = mutableListOf(false, false, false, false,
                             true, true, true, true)
@@ -110,7 +125,7 @@ class BattleActivity : AppCompatActivity(){
     /** move座標計算変数 */
     var flagList: MutableList<Int> = mutableListOf()
     /** 攻撃変数 */
-    private var attackList: List<Any> = listOf(0, 0)
+    private var attackList: Pair<List<Int>, String> = Pair(listOf(), "")
 
     /** 通常攻撃 or 特殊攻撃 */
     var attackType: Int = 0
@@ -126,14 +141,16 @@ class BattleActivity : AppCompatActivity(){
     var canScroll = false
     var scrollWidth = 0
     var scrollHeight = 0
+    var coordinateScrollView: IntArray? = IntArray(2)
 
     /** クラス */
     private var data: DataManagement? = null
     private var statusChange: StatusChange? = null
     var parser: CsvReader? = null
     var dataLog: DataLog? = null
+    private var charMoveAnimation: CharMoveAnimation? = null
 
-    @SuppressLint("ResourceType", "SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ResourceType", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_battle)
@@ -146,6 +163,9 @@ class BattleActivity : AppCompatActivity(){
         // csvデータを読み込み
         parser!!.reader(this)
 
+        // 敵AIの種類
+        //enemyAIType = intent.getStringExtra("AI_type")
+
         // カスタムビュー更新
         leftStatusFragment = left_status as LeftStatusFragment
         rightStatusFragment = right_status as RightStatusFragment
@@ -157,9 +177,7 @@ class BattleActivity : AppCompatActivity(){
         // マップ初期化
         placeList = scrollMapFragment!!.initMap()
         vScroll = findViewById(R.id.vScroll)
-        vScroll!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         hScroll = findViewById(R.id.hScroll)
-        hScroll!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
         // データ初期化
         imgList = scrollMapFragment!!.charImgList
@@ -183,38 +201,9 @@ class BattleActivity : AppCompatActivity(){
                     enemyNumList.shuffle()
                     no = enemyNumList[0]
                 }
-                val charName: String = "char" + parser!!.objects[no].id
-                numberList.add(parser!!.objects[no].id.toInt())
-                val status = Status(
-                        parser!!.objects[no].HP.toInt(),
-                        parser!!.objects[no].MP.toInt(),
-                        parser!!.objects[no].attack.toDouble(),
-                        parser!!.objects[no].defense.toDouble(),
-                        parser!!.objects[no].type
-                )
-                val bmpIdList: MutableList<Int> = arrayListOf()
-                for (j in 1..4) {
-                    val bmpId: Int = resources.getIdentifier(charName + j.toString() + "2", "drawable", packageName)
-                    bmpIdList.add(bmpId)
-                }
-                // drawable Id
-                bmpList.add(bmpIdList)
-                // ステータスデータ
-                statusList.add(status)
-                // ユニットデータ
-                unitList.add(Unit(status))
+                initStatus(no, 0)
             }else{
-                val bmpIdList: MutableList<Int> = arrayListOf()
-                for (j in 0..3) {
-                    val bmpId: Int = R.drawable.background_none_player
-                    bmpIdList.add(bmpId)
-                }
-                numberList.add(1)
-                // drawable Id
-                bmpList.add(bmpIdList)
-                // ステータスデータ
-                statusList.add(notCharStatus)
-                unitList.add(Unit(notCharStatus))
+                initStatus(0, 1)
             }
         }
         // 最初のターンのキャラの場所とステータスを指定
@@ -238,7 +227,7 @@ class BattleActivity : AppCompatActivity(){
 
         // ダメージ表示のテキスト
         damageTextMessage = findViewById(R.id.text_message)
-        val damageText = "<big><font color=\"#7000bfff\">${parser!!.objects[numberList[0]].name}</font></big>" + " のターン"
+        val damageText = getString(R.string.battle_character, "#7000bfff", parser!!.objects[numberList[0]].name) + getString(R.string.turn_message)
         damageTextMessage!!.text = Html.fromHtml(damageText)
         dataLog!!.addLog(damageText)
 
@@ -255,9 +244,47 @@ class BattleActivity : AppCompatActivity(){
         }
     }
 
+    /** キャラステータス初期化 */
+    fun initStatus(no: Int, mode: Int){
+        if (mode == 0) {
+            val charName: String = "char" + parser!!.objects[no].id
+            numberList.add(parser!!.objects[no].id.toInt())
+            val status = Status(
+                    parser!!.objects[no].HP.toInt(),
+                    parser!!.objects[no].MP.toInt(),
+                    parser!!.objects[no].attack.toDouble(),
+                    parser!!.objects[no].defense.toDouble(),
+                    parser!!.objects[no].type
+            )
+            val bmpIdList: MutableList<Int> = mutableListOf()
+            for (j in 1..4) {
+                val bmpId: Int = resources.getIdentifier(charName + j.toString() + "2", "drawable", packageName)
+                bmpIdList.add(bmpId)
+            }
+            // drawable Id
+            bmpList.add(bmpIdList)
+            // ステータスデータ
+            statusList.add(status)
+            // ユニットデータ
+            unitList.add(Unit(status))
+        } else {
+            val bmpIdList: MutableList<Int> = mutableListOf()
+            for (j in 0..3) {
+                val bmpId: Int = R.drawable.background_none_player
+                bmpIdList.add(bmpId)
+            }
+            numberList.add(1)
+            // drawable Id
+            bmpList.add(bmpIdList)
+            // ステータスデータ
+            statusList.add(notCharStatus)
+            unitList.add(Unit(notCharStatus))
+        }
+    }
+
     /** キャラ戦闘開始位置の設定 */
     private fun place(){
-        for (i in 0 until (2*charNum)) {
+        for (i in 0 until imgList.size) {
             if (imgList[i] != null) {
                 // 戦闘開始位置に移動
                 val imgLocation = Location(imgList[i]!!, placeList[charPlaceList[i].X][charPlaceList[i].Y])
@@ -279,8 +306,6 @@ class BattleActivity : AppCompatActivity(){
         if (initialCount == 0) {
             // これ以降は初期化しない
             initialCount = 1
-            // スクロールビューの初期位置
-            changeImagesFragment!!.focusCharAnim0((hScroll!!.getChildAt(0).right - hScroll!!.width) / 2, (vScroll!!.getChildAt(0).bottom - vScroll!!.height) / 2)
             // 戦闘開始位置設定
             place()
             // キャラ画像アニメーション
@@ -297,6 +322,12 @@ class BattleActivity : AppCompatActivity(){
                 }
                 Glide.with(applicationContext).load(changeImagesFragment!!.drawList[i]).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).into(changeImagesFragment!!.allPlayerImageList[i])
             }
+            // 最大キャラ数の計算
+            changeImagesFragment!!.calMaxCharNum()
+            //scrollMapFragment!!.addCharImg(Place(0,0, Player.Player2), 3, imgList, true)
+            // スクロールビューの初期位置
+            vScroll!!.getLocationOnScreen(coordinateScrollView)
+            changeImagesFragment!!.focusCharAnim0((hScroll!!.getChildAt(0).right - hScroll!!.width) / 2, (vScroll!!.getChildAt(0).bottom - vScroll!!.height) / 2)
             // AI
             AIModel = WeakAI(applicationContext, placeList)
             // 各変数・Listを更新
@@ -327,13 +358,13 @@ class BattleActivity : AppCompatActivity(){
             }
             override fun onAnimationRepeat(arg0: Animation) {}
             override fun onAnimationEnd(arg0: Animation) {
-                canScroll = true
                 scrollWidth = vScroll!!.width
                 scrollHeight = vScroll!!.height
-                changeImagesFragment!!.focusCharAnim(changeImagesFragment!!.charturn)
+                changeImagesFragment!!.focusCharAnim(changeImagesFragment!!.charturn, 900, false)
                 if (applyAI[changeImagesFragment!!.charturn]) {
                     otherItemsFragment!!.buttonChange(2)
-                    applyAIAct()
+                    //applyAIMove(this@BattleActivity).execute()
+                    applyAIMove()
                 } else {
                     route = MoveSearch(applicationContext, canmoveMap, placeList, charMap, charPlaceList[changeImagesFragment!!.charturn]).getMoveRange(parser!!.objects[numberList[0]].move.toInt() + 1, otherItemsFragment!!.moveFlag)
                     CharSearch(applicationContext, charMap, placeList, charPlaceList[changeImagesFragment!!.charturn]).plotPlayer()
@@ -382,10 +413,62 @@ class BattleActivity : AppCompatActivity(){
     }
 
     /** スクロールビューの座標を算出 */
-    fun calCoordinateScrollView(): IntArray{
+    private fun calCoordinateScrollView(): IntArray{
         val location = IntArray(2)
         vScroll!!.getLocationOnScreen(location)
         return location
+    }
+
+    /** 全キャラのステータスリスト算出 */
+    fun calStatusList(): Array<Array<Int>>{
+        val res = Array(imgList.size, { Array(8, { 0 }) })
+        for (i in 0 until imgList.size){
+            val type = when (parser!!.objects[numberList[i]].type){
+                "バランス型" -> 0
+                "攻撃型" -> 1
+                "防御型" -> 2
+                else -> 3
+            }
+            if (imgList[i] != null){
+                val sp = when (unitList[i].SP){
+                    0 -> 0
+                    else -> 1
+                }
+                res[i] = arrayOf(
+                        unitList[i].HP,
+                        unitList[i].MP,
+                        unitList[i].Attack.toInt(),
+                        unitList[i].Defence.toInt(),
+                        parser!!.objects[numberList[i]].move.toInt(),
+                        parser!!.objects[numberList[i]].attackRange.toInt(),
+                        type,
+                        sp
+                )
+            } else {
+                res[i] = arrayOf(
+                        0,
+                        0,
+                        unitList[i].Attack.toInt(),
+                        unitList[i].Defence.toInt(),
+                        parser!!.objects[numberList[i]].move.toInt(),
+                        parser!!.objects[numberList[i]].attackRange.toInt(),
+                        type,
+                        0
+                )
+            }
+        }
+        return res
+    }
+
+    /** 現在操作しているキャラを考慮したcharMapの値の変更 */
+    fun changeCharMap(charMap: Array<Array<Int>>): Array<Array<Int>>{
+        val res = Array(boardSize, { Array(boardSize, { 0 }) })
+        for (i in 0 until res.size){
+            for (j in 0 until res[0].size) {
+                res[i][j] = charMap[i][j]
+            }
+        }
+        return res
     }
 
     /** マップチップのクリックイベント */
@@ -413,9 +496,7 @@ class BattleActivity : AppCompatActivity(){
     /** 移動イベント */
     private fun moveEvent(resMoveList: List<Int>){
         // move処理
-        if (flagList[0] == 0 && resMoveList[0] == 0 && canmoveMap[flagList[4]][flagList[2]] > 0) {
-            // スクロールアニメーション
-            changeImagesFragment!!.focusCharMoveAnim(flagList[1], flagList[3])
+        if (flagList[0] == 0 && resMoveList[0] == 0 && (canmoveMap[flagList[4]][flagList[2]] > 0 || applyAI[changeImagesFragment!!.charturn])) {
             // 全ボタンを無効化
             statusChange!!.ButtonNotEnabled(otherItemsFragment!!.attack!!)
             statusChange!!.ButtonNotEnabled(otherItemsFragment!!.move!!)
@@ -424,13 +505,14 @@ class BattleActivity : AppCompatActivity(){
             otherItemsFragment!!.moveFlag = 1
             // アニメーション
             val label = flagList[4]*boardSize + flagList[2]
-            CharMoveAnimation(
+            charMoveAnimation = CharMoveAnimation(
                     imgList[changeImagesFragment!!.charturn]!!,
                     placeList,
                     otherItemsFragment!!,
                     applicationContext,
                     numberList[changeImagesFragment!!.charturn]
-            ).optimizeCharMove(
+            )
+            val moveList = charMoveAnimation!!.optimizeCharMove(
                     startXList[changeImagesFragment!!.charturn],
                     startYList[changeImagesFragment!!.charturn],
                     charPlaceList[changeImagesFragment!!.charturn].X,
@@ -438,6 +520,7 @@ class BattleActivity : AppCompatActivity(){
                     route[label].getValue(label),
                     1500
             )
+            scrollMapFragment!!.charMoveAnimation(moveList.first, flagList, moveList.second)
             // 一個前の座標を保持
             startXList[changeImagesFragment!!.charturn] += resMoveList[3]
             startYList[changeImagesFragment!!.charturn] += resMoveList[4]
@@ -468,28 +551,29 @@ class BattleActivity : AppCompatActivity(){
     }
 
     /** 攻撃イベント */
-    @SuppressLint("SetTextI18n")
     private fun attackEvent(resAttackList: List<Int>){
+        // エフェクトの音量更新
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         // 全体のダメージ前のHPを計算
         val preHP =
                 if (charPlaceList[changeImagesFragment!!.charturn].player == Player.Player2) unitList[0].HP + unitList[1].HP + unitList[2].HP + unitList[3].HP
                 else unitList[4].HP + unitList[5].HP + unitList[6].HP + unitList[7].HP
         val attackMethod = Attack(imgList[changeImagesFragment!!.charturn]!!, placeList, charMap, attackMap, charPlaceList[changeImagesFragment!!.charturn], unitList, applicationContext, numberList[changeImagesFragment!!.charturn])
-        if (flagList[0] == 0 && resAttackList[0] == 0 && attackMap[flagList[4]][flagList[2]] == 1) {
+        if (flagList[0] == 0 && resAttackList[0] == 0 && (attackMap[flagList[4]][flagList[2]] == 1 || applyAI[changeImagesFragment!!.charturn])) {
             attackList = if (attackType == 0)
                 attackMethod.normalAttack(flagList[2], flagList[4], charPlaceList, mapType, unitList[changeImagesFragment!!.charturn])
             else
                 attackMethod.specialAttack(flagList[2], flagList[4], charPlaceList, mapType, unitList[changeImagesFragment!!.charturn], unitList[changeImagesFragment!!.charturn].type, changeImagesFragment!!.charturn)
             flagList[0] = 1
-            if (attackList[0] != 0) {
+            if (attackList.first[0] != 0) {
                 // スクロールアニメーション
-                changeImagesFragment!!.focusCharAnim(attackList[1].toString().toInt())
+                changeImagesFragment!!.focusCharAnim(attackList.first[1], 700, false)
                 // log
                 val colorList = if (changeImagesFragment!!.charturn < 4) listOf("#7000bfff", "#70ff4500") else listOf("#70ff4500", "#7000bfff")
                 if (attackType == 0) {
-                    dataLog!!.addLog("<big><font color=\"${colorList[0]}\">${parser!!.objects[numberList[changeImagesFragment!!.charturn]].name}</font></big>" + "の通常攻撃")
+                    dataLog!!.addLog(getString(R.string.battle_character, colorList[0], parser!!.objects[numberList[changeImagesFragment!!.charturn]].name) + getString(R.string.normal_attack_message))
                 } else {
-                    dataLog!!.addLog("<big><font color=\"${colorList[0]}\">${parser!!.objects[numberList[changeImagesFragment!!.charturn]].name}</font></big>" + "の特殊攻撃")
+                    dataLog!!.addLog(getString(R.string.battle_character, colorList[0], parser!!.objects[numberList[changeImagesFragment!!.charturn]].name) + getString(R.string.special_attack_message))
                 }
                 // 全ボタンを無効化
                 otherItemsFragment!!.allButtonNotEnabled()
@@ -505,41 +589,41 @@ class BattleActivity : AppCompatActivity(){
                         startYList[changeImagesFragment!!.charturn].toFloat()+20f
                 )
                 val saDefense: Array<Float> = arrayOf(
-                        startXList[attackList[1].toString().toInt()].toFloat(),
-                        startXList[attackList[1].toString().toInt()].toFloat()+20f,
-                        startYList[attackList[1].toString().toInt()].toFloat(),
-                        startYList[attackList[1].toString().toInt()].toFloat()+20f
+                        startXList[attackList.first[1]].toFloat(),
+                        startXList[attackList.first[1]].toFloat()+20f,
+                        startYList[attackList.first[1]].toFloat(),
+                        startYList[attackList.first[1]].toFloat()+20f
                 )
-                attackMethod.attackAnim(imgList[changeImagesFragment!!.charturn]!!, imgList[attackList[1].toString().toInt()]!!, scrollMapFragment!!.damageText!!, saAttack, saDefense, dir)
                 when (attackType) {
                     0 -> effectBgm!!.play("normal_attack")
                     else -> effectBgm!!.play("sp_attack")
                 }
-                scrollMapFragment!!.setDamageText(attackList[4].toString(), 750)
+                attackMethod.attackAnim(imgList[changeImagesFragment!!.charturn]!!, imgList[attackList.first[1]]!!, scrollMapFragment!!.damageText!!, saAttack, saDefense, dir)
+                scrollMapFragment!!.setDamageText(attackList.first[4].toString(), 750)
                 // 0.75秒後に処理を実行する
                 mHandler.postDelayed({
-                    when (attackList[5].toString()){
-                        "CRITICAL!!<br></br>" -> effectBgm!!.play("critical")
-                        "MISS....<br></br>" -> effectBgm!!.play("miss")
+                    when (attackList.second){
+                        getString(R.string.critical_message) -> effectBgm!!.play("critical")
+                        getString(R.string.miss_message) -> effectBgm!!.play("miss")
                         else -> effectBgm!!.play("damage")
                     }
                     leftStatusFragment!!.damageFlag = 1
                     // メッセージ
-                    val logMessage = attackList[5].toString() + "<big><font color=\"${colorList[1]}\">${parser!!.objects[numberList[attackList[1].toString().toInt()]].name}</font></big>" + getString(R.string.log_message, attackList[4].toString().toInt())
+                    val logMessage = attackList.second + getString(R.string.battle_character, colorList[1], parser!!.objects[numberList[attackList.first[1]]].name) + getString(R.string.log_message, attackList.first[4])
                     damageTextMessage!!.text = Html.fromHtml(logMessage)
                     dataLog!!.addLog(logMessage)
                     // ステータス画面のアニメーション
                     rightStatusFragment!!.sumHP1 = unitList[0].HP + unitList[1].HP + unitList[2].HP + unitList[3].HP
                     rightStatusFragment!!.sumHP2 = unitList[4].HP + unitList[5].HP + unitList[6].HP + unitList[7].HP
-                    leftStatusFragment!!.getUnitStatus(charPlaceList[attackList[1].toString().toInt()], unitList[attackList[1].toString().toInt()])
+                    leftStatusFragment!!.getUnitStatus(charPlaceList[attackList.first[1]], unitList[attackList.first[1]])
                     leftStatusFragment!!.leftStatusAnimation(
-                            statusList[attackList[1].toString().toInt()],
-                            unitList[attackList[1].toString().toInt()],
-                            bmpList[attackList[1].toString().toInt()][0],
-                            attackList[2].toString().toInt(),
-                            attackList[3].toString().toInt(),
-                            parser!!.objects[numberList[attackList[1].toString().toInt()]].name,
-                            charPlaceList[attackList[1].toString().toInt()]
+                            statusList[attackList.first[1]],
+                            unitList[attackList.first[1]],
+                            bmpList[attackList.first[1]][0],
+                            attackList.first[2],
+                            attackList.first[3],
+                            parser!!.objects[numberList[attackList.first[1]]].name,
+                            charPlaceList[attackList.first[1]]
                     )
                     rightStatusFragment!!.rightStatusAnimation(charPlaceList[changeImagesFragment!!.charturn].player, preHP)
                 }, 750)
@@ -554,61 +638,265 @@ class BattleActivity : AppCompatActivity(){
         }
     }
 
-    /** AI適用時の行動 */
-    private fun applyAIAct(){
+    /** WeakAI適用時の行動 */
+    private fun applyWeakAIMove(){
         // 移動
-        otherItemsFragment!!.move()
+        val moveNextList = AIModel!!.computeNext(
+                charPlaceList[changeImagesFragment!!.charturn],
+                parser!!.objects[numberList[changeImagesFragment!!.charturn]].move.toInt() + 1,
+                parser!!.objects[numberList[changeImagesFragment!!.charturn]].attackRange.toInt() + 1,
+                charMap
+        )
+        CharSearch(applicationContext, charMap, placeList, charPlaceList[changeImagesFragment!!.charturn]).plotPlayer()
+        aiMovePlace = moveNextList.first
+        route = moveNextList.second
         mHandler.postDelayed({
-            val movePlace = AIModel!!.computeNext(
-                    charPlaceList[changeImagesFragment!!.charturn],
-                    parser!!.objects[numberList[changeImagesFragment!!.charturn]].move.toInt() + 1,
-                    parser!!.objects[numberList[changeImagesFragment!!.charturn]].attackRange.toInt() + 1,
-                    charMap
-            )
             val mapInformation = MapInformation(placeList)
             val onClick = MoveLocation(mapInformation.getCenter(mapInformation))
-            flagList = onClick.moveMap(movePlace.X, movePlace.Y)
-            var res = onClick.onMoveEvent(imgList[changeImagesFragment!!.charturn]!!, startXList[changeImagesFragment!!.charturn], startYList[changeImagesFragment!!.charturn], flagList)
+            flagList = onClick.moveMap(aiMovePlace!!.X, aiMovePlace!!.Y)
+            val res = onClick.onMoveEvent(imgList[changeImagesFragment!!.charturn]!!, startXList[changeImagesFragment!!.charturn], startYList[changeImagesFragment!!.charturn], flagList)
             moveEvent(res)
+        }, 1000)
+    }
+
+    private class applyDeepAIMove internal constructor(context: BattleActivity): AsyncTask<Void, Void, String>() {
+
+        private val activityReference: WeakReference<BattleActivity> = WeakReference(context)
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+            activity.otherItemsFragment!!.load()
+        }
+
+        override fun doInBackground(vararg params: Void): String {
+            return postHtml1().toString()
+        }
+
+        override fun onPostExecute(result: String) {
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+            val data = result.toInt()
+
+            // 移動
+            val moveNextList = activity.AIModel!!.computeNext(
+                    activity.charPlaceList[activity.changeImagesFragment!!.charturn],
+                    activity.parser!!.objects[activity.numberList[activity.changeImagesFragment!!.charturn]].move.toInt() + 1,
+                    activity.parser!!.objects[activity.numberList[activity.changeImagesFragment!!.charturn]].attackRange.toInt() + 1,
+                    activity.charMap
+            )
+            CharSearch(activity.applicationContext, activity.charMap, activity.placeList, activity.charPlaceList[activity.changeImagesFragment!!.charturn]).plotPlayer()
+            activity.aiMovePlace = moveNextList.first
+            activity.route = moveNextList.second
+            Handler().postDelayed({
+                val mapInformation = MapInformation(activity.placeList)
+                val onClick = MoveLocation(mapInformation.getCenter(mapInformation))
+                activity.flagList = onClick.moveMap(activity.aiMovePlace!!.X, activity.aiMovePlace!!.Y)
+                val res = onClick.onMoveEvent(
+                        activity.imgList[activity.changeImagesFragment!!.charturn]!!,
+                        activity.startXList[activity.changeImagesFragment!!.charturn],
+                        activity.startYList[activity.changeImagesFragment!!.charturn],
+                        activity.flagList
+                )
+                activity.moveEvent(res)
+            }, 1000)
+        }
+
+        private fun postHtml1(): String? {
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) {
+                return "error"
+            } else {
+                val client1 = OkHttpClient()
+                val json = JSONObject()
+                json.put("x1", activity.calStatusList().contentDeepToString())
+                json.put("x2", activity.changeCharMap(activity.charMap).contentDeepToString())
+                json.put("x3", activity.mapType.contentDeepToString())
+                json.put("movemap", activity.canmoveMap.contentDeepToString())
+                Log.d("x1", activity.calStatusList().contentDeepToString())
+                Log.d("x2", activity.changeCharMap(activity.charMap).contentDeepToString())
+                Log.d("x3", activity.mapType.contentDeepToString())
+                Log.d("movemap", activity.canmoveMap.contentDeepToString())
+                val postBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString())
+                val req = Request.Builder().url("https://c5fh09hi43.execute-api.us-east-2.amazonaws.com/default/chainer1_map").post(postBody).build()
+                val resp = client1.newCall(req).execute()
+                return if (resp?.body() != null) resp.body().string() else "error"
+            }
+        }
+    }
+
+    private fun applyAIMove() {
+        if (enemyAIType == "DeepAI" || changeImagesFragment!!.charturn < 4) {
+            MoveSearch(applicationContext, canmoveMap, placeList, charMap, charPlaceList[changeImagesFragment!!.charturn]).getMoveRange(parser!!.objects[numberList[changeImagesFragment!!.charturn]].move.toInt() + 1, 0)
+            CharSearch(applicationContext, charMap, placeList, charPlaceList[changeImagesFragment!!.charturn]).plotPlayer()
+            applyDeepAIMove(this).execute()
+        } else {
+            applyWeakAIMove()
+        }
+    }
+
+
+    private class applyDeepAIAttackType internal constructor(context: BattleActivity): AsyncTask<Void, Void, String>() {
+
+        private val activityReference: WeakReference<BattleActivity> = WeakReference(context)
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+            activity.otherItemsFragment!!.load()
+        }
+
+        override fun doInBackground(vararg params: Void): String {
+            return postHtml2().toString()
+        }
+
+        override fun onPostExecute(result: String) {
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+            activity.otherItemsFragment!!.finishLoad()
+            val data = result.toInt()
+        }
+
+        private fun postHtml2(): String? {
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) {
+                return "error"
+            } else {
+                val client2 = OkHttpClient()
+                val json = JSONObject()
+                json.put("x1", activity.calStatusList().contentDeepToString())
+                json.put("x2", activity.changeCharMap(activity.charMap).contentDeepToString())
+                json.put("x3", activity.mapType.contentDeepToString())
+                json.put("movemap", activity.canmoveMap.contentDeepToString())
+                json.put("characters", activity.charMap.contentDeepToString())
+                json.put("range", activity.parser!!.objects[activity.numberList[activity.changeImagesFragment!!.charturn]].attackRange)
+                val postBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString())
+                val req = Request.Builder().url("https://c5fh09hi43.execute-api.us-east-2.amazonaws.com/default/chainer1_map").post(postBody).build()
+                val resp = client2.newCall(req).execute()
+                return if (resp?.body() != null) resp.body().string() else "error"
+            }
+        }
+    }
+
+    private class applyDeepAIAttack internal constructor(context: BattleActivity, movePlace: Place): AsyncTask<Void, Void, String>() {
+
+        private val activityReference: WeakReference<BattleActivity> = WeakReference(context)
+        private val mMovePlace = movePlace
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+            activity.otherItemsFragment!!.load()
+        }
+
+        override fun doInBackground(vararg params: Void): String {
+            return postHtml3().toString()
+        }
+
+        override fun onPostExecute(result: String) {
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+            activity.otherItemsFragment!!.finishLoad()
+            val data = result.toInt()
+
             // 攻撃 or 行動終了
-            mHandler.postDelayed({
-                if (AIModel!!.canAttack) {
-                    val attackPlace = AIModel!!.computeAttack(movePlace)
+            if (activity.AIModel!!.canAttack) {
+                Handler().postDelayed({
                     val random = Random().nextInt(2) % 2
-                    if (unitList[changeImagesFragment!!.charturn].MP > 0) otherItemsFragment!!.attack(random) else otherItemsFragment!!.attack(0)
-                    mHandler.postDelayed({
-                        flagList = onClick.moveMap(attackPlace.X, attackPlace.Y)
-                        res = onClick.onMoveEvent(imgList[changeImagesFragment!!.charturn]!!, startXList[changeImagesFragment!!.charturn], startYList[changeImagesFragment!!.charturn], flagList)
-                        attackEvent(res)
-                    }, 900)
-                } else {
-                    AIModel!!.resetMap()
-                    end()
-                }
-            }, 1500)
-        }, 1100)
+                    if (activity.unitList[activity.changeImagesFragment!!.charturn].MP > 0) activity.otherItemsFragment!!.attack(random) else activity.otherItemsFragment!!.attack(0)
+                    val attackPlace = activity.AIModel!!.computeAttack(mMovePlace)
+                    Handler().postDelayed({
+                        val mapInformation = MapInformation(activity.placeList)
+                        val onClick = MoveLocation(mapInformation.getCenter(mapInformation))
+                        activity.flagList = onClick.moveMap(attackPlace.X, attackPlace.Y)
+                        val res = onClick.onMoveEvent(
+                                activity.imgList[activity.changeImagesFragment!!.charturn]!!,
+                                activity.startXList[activity.changeImagesFragment!!.charturn],
+                                activity.startYList[activity.changeImagesFragment!!.charturn],
+                                activity.flagList
+                        )
+                        activity.attackEvent(res)
+                    }, 1000)
+                }, 1000)
+            }else {
+                activity.AIModel!!.resetMap()
+                activity.end()
+            }
+        }
+
+        private fun postHtml3(): String? {
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) {
+                return "error"
+            } else {
+                val client3 = OkHttpClient()
+                val json = JSONObject()
+                json.put("x1", activity.calStatusList().contentDeepToString())
+                json.put("x2", activity.changeCharMap(activity.charMap).contentDeepToString())
+                json.put("x3", activity.mapType.contentDeepToString())
+                json.put("movemap", activity.canmoveMap.contentDeepToString())
+                json.put("characters", activity.charMap.contentDeepToString())
+                json.put("range", activity.parser!!.objects[activity.numberList[activity.changeImagesFragment!!.charturn]].attackRange)
+                val postBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString())
+                val req = Request.Builder().url("https://c5fh09hi43.execute-api.us-east-2.amazonaws.com/default/chainer1_map").post(postBody).build()
+                val resp = client3.newCall(req).execute()
+                return if (resp?.body() != null) resp.body().string() else "error"
+            }
+        }
+    }
+
+    fun applyAIAttack(movePlace: Place) {
+        // 攻撃 or 行動終了
+        if (enemyAIType == "DeepAI" || changeImagesFragment!!.charturn < 4) {
+            applyDeepAIAttackType(this).execute()
+            applyDeepAIAttack(this, movePlace).execute()
+        } else {
+            applyWeakAIAttack(movePlace)
+        }
+    }
+
+    private fun applyWeakAIAttack(movePlace: Place){
+        // 攻撃 or 行動終了
+        if (AIModel!!.canAttack) {
+            Handler().postDelayed({
+                val random = Random().nextInt(2) % 2
+                if (unitList[changeImagesFragment!!.charturn].MP > 0) otherItemsFragment!!.attack(random) else otherItemsFragment!!.attack(0)
+                val attackPlace = AIModel!!.computeAttack(movePlace)
+                mHandler.postDelayed({
+                    val mapInformation = MapInformation(placeList)
+                    val onClick = MoveLocation(mapInformation.getCenter(mapInformation))
+                    flagList = onClick.moveMap(attackPlace.X, attackPlace.Y)
+                    val res = onClick.onMoveEvent(imgList[changeImagesFragment!!.charturn]!!, startXList[changeImagesFragment!!.charturn], startYList[changeImagesFragment!!.charturn], flagList)
+                    attackEvent(res)
+                }, 1000)
+            }, 1000)
+        }else {
+            AIModel!!.resetMap()
+            end()
+        }
     }
 
     /** ペイン床にいる時の終了処理 */
-    @SuppressLint("SetTextI18n")
-    private fun damageEnd(){
-        // スクロールアニメーション
-        changeImagesFragment!!.focusCharAnim(changeImagesFragment!!.charturn)
+    fun damageEnd(){
+        // エフェクトの音量更新
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         // 全体のダメージ前のHPを計算
         val preHP =
                 if (charPlaceList[changeImagesFragment!!.charturn].player.other() == Player.Player2) unitList[0].HP + unitList[1].HP + unitList[2].HP + unitList[3].HP
                 else unitList[4].HP + unitList[5].HP + unitList[6].HP + unitList[7].HP
-        val attackMethod = Attack(imgList[changeImagesFragment!!.charturn]!!, placeList, charMap, attackMap, charPlaceList[changeImagesFragment!!.charturn], unitList, this, numberList[changeImagesFragment!!.charturn])
+        val attackMethod = Attack(imgList[changeImagesFragment!!.charturn]!!, placeList, charMap, attackMap, charPlaceList[changeImagesFragment!!.charturn], unitList, applicationContext, numberList[changeImagesFragment!!.charturn])
         val painDamage = 30
         val unitHP = unitList[changeImagesFragment!!.charturn].HP - painDamage
         unitList[changeImagesFragment!!.charturn].HP = if (unitHP > 0) unitHP else 0
-        scrollMapFragment!!.setDamageText(painDamage.toString(), 300)
+        scrollMapFragment!!.setDamageText(painDamage.toString(), 100)
         attackMethod.painAnim(scrollMapFragment!!.damageText!!, startXList[changeImagesFragment!!.charturn].toFloat(), startYList[changeImagesFragment!!.charturn].toFloat())
-        effectBgm!!.play("damage")
         leftStatusFragment!!.damageFlag = 1
         // メッセージ
         val color = if (changeImagesFragment!!.charturn < 4) "#7000bfff" else "#70ff4500"
-        val damageText = "追加ダメージ<br></br>" +"<big><font color=\"$color\">${parser!!.objects[numberList[changeImagesFragment!!.charturn]].name}</font></big>" + getString(R.string.log_message, painDamage)
+        val damageText = getString(R.string.pain_damage) + getString(R.string.battle_character, color, parser!!.objects[numberList[changeImagesFragment!!.charturn]].name) + getString(R.string.log_message, painDamage)
         damageTextMessage!!.text = Html.fromHtml(damageText)
         dataLog!!.addLog(damageText)
         // ステータス画面のアニメーション
@@ -625,13 +913,14 @@ class BattleActivity : AppCompatActivity(){
                 charPlaceList[changeImagesFragment!!.charturn]
         )
         rightStatusFragment!!.rightStatusAnimation(charPlaceList[changeImagesFragment!!.charturn].player.other(), preHP)
+        effectBgm!!.play("damage")
         damageAnimation(1, attackMethod)
     }
 
     private fun damageAnimation(condition: Int, attackMethod: Attack){
         statusChange!!.ButtonNotEnabled(otherItemsFragment!!.end!!)
         statusChange!!.ButtonNotEnabled(otherItemsFragment!!.attackEnd!!)
-        val unitIndex = if (condition == 0) attackList[1].toString().toInt() else changeImagesFragment!!.charturn
+        val unitIndex = if (condition == 0) attackList.first[1] else changeImagesFragment!!.charturn
         scrollMapFragment!!.damageText!!.startWaveAnimation(object : WaveAnimationLayout.EndAnimationListener {
             override fun onEnd() {
                 // 0.6秒後に処理を実行する
@@ -643,7 +932,7 @@ class BattleActivity : AppCompatActivity(){
                     if (unitList[unitIndex].HP == 0){
                         // メッセージ
                         val color = if (unitIndex < 4) "#7000bfff" else "#70ff4500"
-                        val damageText = "<big><font color=\"$color\">${parser!!.objects[numberList[unitIndex]].name}</font></big> は倒れた"
+                        val damageText = getString(R.string.battle_character, color, parser!!.objects[numberList[unitIndex]].name) + getString(R.string.char_down_message)
                         dataLog!!.addLog(damageText)
                         changeImagesFragment!!.updatePlayerCharNum(unitIndex, 1)
                         effectBgm!!.play("down")
@@ -661,12 +950,6 @@ class BattleActivity : AppCompatActivity(){
     fun damageAnimationFinish(condition: Int){
         if (condition == 1 && changeImagesFragment!!.judgeBattleEnd()){
             normalEnd()
-            if (applyAI[changeImagesFragment!!.charturn]){
-                otherItemsFragment!!.buttonChange(2)
-                applyAIAct()
-            } else {
-                otherItemsFragment!!.buttonChange(1)
-            }
         } else if (condition == 0 && changeImagesFragment!!.judgeBattleEnd() && !applyAI[changeImagesFragment!!.charturn]){
             end()
         } else if (condition == 0 && changeImagesFragment!!.judgeBattleEnd() && applyAI[changeImagesFragment!!.charturn]) {
@@ -676,9 +959,9 @@ class BattleActivity : AppCompatActivity(){
     }
 
     /** ペイン床にいない時の終了処理 */
-    @SuppressLint("SetTextI18n", "ResourceType")
+    @SuppressLint("ResourceType")
     private fun normalEnd(){
-        dataLog!!.addLog("<font color=\"#ffff00\">ターン終了</font>")
+        dataLog!!.addLog(getString(R.string.turn_end))
         // マップ初期化
         ResetMap(canmoveMap, attackMap, placeList).resetList()
         // 行動順の更新
@@ -687,7 +970,7 @@ class BattleActivity : AppCompatActivity(){
         changeImagesFragment!!.updateCharTurn(imgList)
         changeImagesFragment!!.colorAnimation()
         leftStatusFragment!!.getUnitStatus(charPlaceList[changeImagesFragment!!.charturn], unitList[changeImagesFragment!!.charturn])
-        changeImagesFragment!!.focusCharAnim(changeImagesFragment!!.charturn)
+        changeImagesFragment!!.focusCharAnim(changeImagesFragment!!.charturn, 700, false)
         // ターン数更新
         if (changeImagesFragment!!.charturn == firstTurnCharNum) changeImagesFragment!!.updateTurn()
         // ターン数と各playerの残キャラ数によって処理変更
@@ -700,7 +983,7 @@ class BattleActivity : AppCompatActivity(){
             unitList[changeImagesFragment!!.charturn].SP = 0
             // メッセージ初期化
             val color = if (changeImagesFragment!!.charturn < 4) "#7000bfff" else "#70ff4500"
-            val damageText = "<big><font color=\"$color\">${parser!!.objects[numberList[changeImagesFragment!!.charturn]].name}</font></big>" + " のターン"
+            val damageText = getString(R.string.battle_character, color, parser!!.objects[numberList[changeImagesFragment!!.charturn]].name) + getString(R.string.turn_message)
             damageTextMessage!!.text = Html.fromHtml(damageText)
             dataLog!!.addLog(damageText)
             changeImagesFragment!!.getTurn()
@@ -712,13 +995,24 @@ class BattleActivity : AppCompatActivity(){
                     parser!!.objects[numberList[changeImagesFragment!!.charturn]].name,
                     charPlaceList[changeImagesFragment!!.charturn]
             )
-            // 移動ボタン以外を有効化
-            otherItemsFragment!!.allButtonEnabled()
-            statusChange!!.ButtonNotEnabled(otherItemsFragment!!.move!!)
-             // 移動可能範囲の算出
-            route = MoveSearch(applicationContext, canmoveMap, placeList, charMap, charPlaceList[changeImagesFragment!!.charturn])
-                    .getMoveRange(parser!!.objects[numberList[changeImagesFragment!!.charturn]].move.toInt()+1, otherItemsFragment!!.moveFlag)
-            CharSearch(applicationContext, charMap, placeList, charPlaceList[changeImagesFragment!!.charturn]).plotPlayer()
+            when {
+                applyAI[changeImagesFragment!!.charturn] -> {
+                    otherItemsFragment!!.buttonChange(2)
+                    //applyAIMove(this).execute()
+                    applyAIMove()
+                }
+                else -> {
+                    // 移動ボタン・特殊攻撃ボタン以外を有効化
+                    otherItemsFragment!!.allButtonEnabled()
+                    statusChange!!.ButtonNotEnabled(otherItemsFragment!!.move!!)
+                    statusChange!!.ButtonNotEnabled(otherItemsFragment!!.specialAttack!!)
+                    // 移動可能範囲の算出
+                    route = MoveSearch(applicationContext, canmoveMap, placeList, charMap, charPlaceList[changeImagesFragment!!.charturn])
+                            .getMoveRange(parser!!.objects[numberList[changeImagesFragment!!.charturn]].move.toInt()+1, otherItemsFragment!!.moveFlag)
+                    CharSearch(applicationContext, charMap, placeList, charPlaceList[changeImagesFragment!!.charturn]).plotPlayer()
+                    otherItemsFragment!!.buttonChange(1)
+                }
+            }
         } else {
             battleFinish()
         }
@@ -732,16 +1026,10 @@ class BattleActivity : AppCompatActivity(){
                 statusChange!!.ButtonNotEnabled(otherItemsFragment!!.attack!!)
                 statusChange!!.ButtonNotEnabled(otherItemsFragment!!.move!!)
                 statusChange!!.ButtonNotEnabled(otherItemsFragment!!.end!!)
-                damageEnd()
+                // スクロールアニメーション
+                changeImagesFragment!!.focusCharAnim(changeImagesFragment!!.charturn, 50, true)
             } else {
                 normalEnd()
-                when {
-                    applyAI[changeImagesFragment!!.charturn] -> {
-                        otherItemsFragment!!.buttonChange(2)
-                        applyAIAct()
-                    }
-                    else -> otherItemsFragment!!.buttonChange(1)
-                }
             }
         }
     }
@@ -749,6 +1037,8 @@ class BattleActivity : AppCompatActivity(){
     /** バトル終了 */
     @SuppressLint("ResourceType", "SetTextI18n")
     fun battleFinish(){
+        // エフェクトの音量更新
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         // ボタンを無効化
         otherItemsFragment!!.allButtonNotEnabled()
         // リザルト画面に移行
@@ -791,6 +1081,36 @@ class BattleActivity : AppCompatActivity(){
         finish()
     }
 
+    /** 音量設定 */
+    @Suppress("DEPRECATED_IDENTITY_EQUALS")
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onResume() {
         super.onResume()
         // プレイヤーの処理
@@ -802,13 +1122,21 @@ class BattleActivity : AppCompatActivity(){
             intent.putExtra("flag", 0)
             startService(intent)
             bgmFlag = 1
+
+            // AudioManagerを取得する
+            am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            // 最大音量値を取得
+            mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            // プリファレンスの呼び出し
+            data = DataManagement(this)
         } else {
             intent.putExtra("flag", 2)
             startService(intent)
         }
 
         // SoundPool の設定
-        Thread.sleep(1000)
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
@@ -818,6 +1146,7 @@ class BattleActivity : AppCompatActivity(){
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(applicationContext, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("battle_start")
         effectBgm!!.getList("battle_finish")
         effectBgm!!.getList("normal_attack")
@@ -879,6 +1208,7 @@ class BattleActivity : AppCompatActivity(){
         scrollWidth = 0
         scrollHeight = 0
         canScroll = false
+        coordinateScrollView = null
 
         dataLog!!.release()
         dataLog = null
@@ -897,7 +1227,7 @@ class BattleActivity : AppCompatActivity(){
         charPlaceList = mutableListOf()
         applyAI = mutableListOf()
         flagList = mutableListOf()
-        attackList = listOf()
+        attackList = Pair(listOf(), "")
 
         attackType = 0
         firstTurnCharNum = 0
@@ -906,11 +1236,15 @@ class BattleActivity : AppCompatActivity(){
         charNum = 0
         density = 0f
 
+        aiMovePlace = null
         AIModel!!.init()
         AIModel = null
         damageTextMessage!!.setBackgroundResource(0)
         damageTextMessage = null
         data = null
+        am = null
+        mVol = 0f
+        ringVolume = 0f
         statusChange = null
         parser = null
         Glide.get(this).clearMemory()

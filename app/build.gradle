@@ -41,6 +41,7 @@ android {
                     '/src/main/res/drawables/effect',
                     '/src/main/res/drawables/icon',
                     '/src/main/res/drawables/start',
+                    '/src/main/res/drawables/tutorial',
                     '/src/main/res/drawables',
                     '/src/main/res/layouts/ai',
                     '/src/main/res/layouts/battle',
@@ -69,4 +70,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     implementation 'com.github.lightfire:Android-Gradient-Text-Color:b0047755f7'
     implementation 'com.github.lguipeng:BubbleView:1.0.1'
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
 }

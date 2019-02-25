@@ -4,11 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.example.mitake.aiapplication.R
+import android.R.id.edit
+import android.widget.*
 
 
 class QuestListAdapter(context: Context, private val mResource: Int, private val mItems: List<CustomQuestList>) : ArrayAdapter<CustomQuestList>(context, mResource, mItems) {
@@ -56,6 +54,7 @@ class QuestListAdapter(context: Context, private val mResource: Int, private val
         val victoryCondition = view.findViewById(R.id.victory_condition) as Button
         victoryCondition.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         victoryCondition.text = item.getVictoryCondition()
+        victoryCondition.setOnClickListener({ v -> (parent as ListView).performItemClick(v, position, R.id.victory_condition.toLong()) })
 
         val questBackground: LinearLayout = view.findViewById(R.id.background_quest_name)
         questBackground.setLayerType(View.LAYER_TYPE_SOFTWARE, null)

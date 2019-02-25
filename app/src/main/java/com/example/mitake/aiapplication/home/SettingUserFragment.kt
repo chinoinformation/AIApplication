@@ -1,7 +1,9 @@
 package com.example.mitake.aiapplication.home
 
 
+import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -26,6 +28,9 @@ class SettingUserFragment: Fragment() {
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
 
     private var mainChar: ImageView? = null
 
@@ -33,16 +38,27 @@ class SettingUserFragment: Fragment() {
     private var commentButton: EditText? = null
     private var OKButton: Button? = null
 
-    private var data: DataManagement? = null
     private var parser: CsvReader? = null
     private var partyNum: Int = 0
     private var charId: MutableList<Int> = mutableListOf(1,5,9,13)
     private var charList: MutableList<ImageView?> = mutableListOf(null, null, null, null)
 
+    /** プリファレンス */
+    private var data: DataManagement? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_setting_user, container, false)
 
+        // プリファレンスの呼び出し
+        data = DataManagement(context!!)
+
+        // AudioManagerを取得する
+        am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -53,6 +69,7 @@ class SettingUserFragment: Fragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!.applicationContext, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("other_button")
 
         mainChar = root.findViewById(R.id.main_char)
@@ -98,10 +115,11 @@ class SettingUserFragment: Fragment() {
         }
 
         // 枠線作成
-        Glide.with(activity!!.applicationContext).load(R.drawable.app_ririi2).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).apply(RequestOptions().transform(CircleCrop())).into(mainChar!!)
+        Glide.with(activity!!.applicationContext).load(R.drawable.ririi_1).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).apply(RequestOptions().transform(CircleCrop())).into(mainChar!!)
         mainChar!!.setBackgroundResource(R.drawable.icon_round)
 
         OKButton!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             OKButton!!.setOnClickListener(null)
             // FragmentManagerからFragmentTransactionを作成
@@ -149,7 +167,9 @@ class SettingUserFragment: Fragment() {
         partyNum = 0
         charId = mutableListOf()
         charList = mutableListOf()
-
+        am = null
+        mVol = 0f
+        ringVolume = 0f
     }
 
 }

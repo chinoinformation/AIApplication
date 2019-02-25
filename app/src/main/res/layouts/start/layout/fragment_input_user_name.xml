@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/drawable_quest_type">
+
+    <com.lightfire.gradienttextcolor.GradientTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="4dp"
+        android:shadowColor="#ff4500"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
+        android:shadowRadius="1.5"
+        android:text="@string/input_user_name"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:gradientEnd="#ff4500"
+        app:gradientStart="#fffaf0" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_user_name"
+        android:layout_margin="8dp"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#ffffff"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/aren_2"
+            android:scaleType="centerCrop"
+            android:scrollY="-25dp"/>
+
+        <EditText
+            android:id="@+id/input_user_name"
+            android:layout_width="230dp"
+            android:layout_height="60dp"
+            android:background="@drawable/drawable_input_user_name"
+            android:gravity="center"
+            android:maxLength="10"
+            android:text="@string/default_user_name"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:padding="4dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="@string/OK"
+            android:soundEffectsEnabled="false"/>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:padding="4dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:background="@drawable/drawable_quest_battle_background"
+            android:text="@string/cancel"
+            android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+</LinearLayout>

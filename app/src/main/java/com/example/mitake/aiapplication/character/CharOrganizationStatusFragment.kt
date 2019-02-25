@@ -1,7 +1,9 @@
 package com.example.mitake.aiapplication.character
 
 import android.app.Dialog
+import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -41,11 +43,23 @@ class CharOrganizationStatusFragment : Fragment() {
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_char_organization_status, container, false)
 
+        // プリファレンスの呼び出し
+        data = DataManagement(context!!)
+
+        // AudioManagerを取得する
+        am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -56,6 +70,7 @@ class CharOrganizationStatusFragment : Fragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!.applicationContext, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("other_button")
 
         f1 = root.findViewById(R.id.char1) as View
@@ -76,9 +91,6 @@ class CharOrganizationStatusFragment : Fragment() {
 
         // csvデータを読み込み
         parser!!.reader(activity!!.applicationContext)
-
-        // プリファレンス
-        data = DataManagement(context!!)
 
         return root
     }
@@ -109,18 +121,22 @@ class CharOrganizationStatusFragment : Fragment() {
 
             // AI適用ボタンの初期設定
             f1!!.ai_button.setOnClickListener {
+                effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f1!!.ai_button, 0)
             }
             f2!!.ai_button.setOnClickListener {
+                effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f2!!.ai_button, 1)
             }
             f3!!.ai_button.setOnClickListener {
+                effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f3!!.ai_button, 2)
             }
             f4!!.ai_button.setOnClickListener {
+                effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f4!!.ai_button, 3)
             }
@@ -174,6 +190,7 @@ class CharOrganizationStatusFragment : Fragment() {
 
     // キャラ選択
     private fun selectChar(v: View, s: Int, g: Int, type: Int, noneFlag: Boolean) {
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.play("other_button")
         // リストを作成
         var charList: Array<String> = arrayOf()
@@ -200,6 +217,7 @@ class CharOrganizationStatusFragment : Fragment() {
                 })
                 .setNegativeButton("OK", { dialog, whichButton ->
                     //⇒OKボタンを押下した時のイベント処理
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                     effectBgm!!.play("other_button")
                     // キャラ名
                     renameChar(v, charId[type])
@@ -209,6 +227,7 @@ class CharOrganizationStatusFragment : Fragment() {
                     statusChar(v, charId[type])
                 })
                 .setPositiveButton("キャンセル", { dialog, whichButton ->
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                     effectBgm!!.play("other_button")
                 })
         val dialog = builder.create()
@@ -327,6 +346,9 @@ class CharOrganizationStatusFragment : Fragment() {
         data = null
         charId = mutableListOf()
         aiButtonCheckList = mutableListOf()
+        am = null
+        mVol = 0f
+        ringVolume = 0f
     }
 
 }

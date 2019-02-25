@@ -3,8 +3,10 @@ package com.example.mitake.aiapplication.battle.menu
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.DialogFragment
+import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +17,7 @@ import android.widget.Button
 import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.battle.BattleActivity
 import com.example.mitake.aiapplication.bgm.EffectList
+import com.example.mitake.aiapplication.data.DataManagement
 import com.example.mitake.aiapplication.home.IntentActivity
 import kotlinx.android.synthetic.main.menu.view.*
 
@@ -31,9 +34,21 @@ class MenuDialogFragment: DialogFragment() {
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
 
+    private var data: DataManagement? = null
+
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         alert = AlertDialog.Builder(activity)
+
+        // プリファレンスの呼び出し
+        data = DataManagement(activity!!.applicationContext)
+
+        // AudioManagerを取得する
+        val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
 
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
@@ -45,6 +60,7 @@ class MenuDialogFragment: DialogFragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("other_button")
 
         mainActivity = (activity as BattleActivity)
@@ -66,6 +82,7 @@ class MenuDialogFragment: DialogFragment() {
         // 戦闘ログボタンを押す
         val battleLog: Button = alertView.findViewById(R.id.battle_log)
         battleLog.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
 
             battleLog.isEnabled = false
@@ -79,6 +96,7 @@ class MenuDialogFragment: DialogFragment() {
         // リタイアボタンを押す
         val retire: Button = alertView.findViewById(R.id.retire)
         retire.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             // 画面遷移
             val intent = Intent(activity!!, IntentActivity::class.java)
@@ -94,6 +112,7 @@ class MenuDialogFragment: DialogFragment() {
         // キャンセルボタンを押す
         val cancel: Button = alertView.findViewById(R.id.cancel)
         cancel.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             getDialog().dismiss()
         }
@@ -132,6 +151,7 @@ class MenuDialogFragment: DialogFragment() {
         mainActivity = null
         dialog = null
         alert = null
+        data = null
         Handler().postDelayed({
             effectBgm!!.release()
         }, 2000)

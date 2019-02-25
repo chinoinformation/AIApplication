@@ -3,12 +3,8 @@ package com.example.mitake.aiapplication.battle
 import android.widget.ImageView
 
 class MoveLocation(CenterList: Array<Array<Array<Int>>>) {
-    // アニメーション変数
-    private var diffX: Int = 0
-    private var diffY: Int = 0
     // move座標計算変数
     private val centerList = CenterList
-
 
     // move関数の詳細
     // return ->  MutableList(flag, moveX, localMoveX, moveY, localMoveY)
@@ -41,8 +37,8 @@ class MoveLocation(CenterList: Array<Array<Array<Int>>>) {
         val presentX = location[0] + img.width/2
         val presentY = location[1] + img.height/2
         // move座標と現在位置の差分
-        diffX = flagList[1] - presentX
-        diffY = flagList[3] - presentY
+        val diffX = flagList[1] - presentX
+        val diffY = flagList[3] - presentY
 
         // 終点
         val X = startX + diffX

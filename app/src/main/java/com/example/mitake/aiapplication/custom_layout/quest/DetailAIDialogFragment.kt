@@ -1,8 +1,10 @@
 package com.example.mitake.aiapplication.custom_layout.quest
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +15,7 @@ import android.view.*
 import android.widget.Button
 import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.bgm.EffectList
+import com.example.mitake.aiapplication.data.DataManagement
 import kotlinx.android.synthetic.main.detail_ai.view.*
 
 class DetailAIDialogFragment: DialogFragment() {
@@ -24,9 +27,21 @@ class DetailAIDialogFragment: DialogFragment() {
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
 
+    /** プリファレンス */
+    private var data: DataManagement? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.detail_ai, container, false)
 
+        // プリファレンスの呼び出し
+        data = DataManagement(context!!)
+
+        // AudioManagerを取得する
+        val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -37,6 +52,7 @@ class DetailAIDialogFragment: DialogFragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("other_button")
 
         mViewPager = root.findViewById(R.id.ai_pager) as ViewPager
@@ -48,19 +64,15 @@ class DetailAIDialogFragment: DialogFragment() {
         // OKボタン
         OKButton = root.findViewById(R.id.OK)
         OKButton!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-
-        return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         // OKボタンを押す
         OKButton!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             OKButton!!.setOnClickListener(null)
             dialog.dismiss()
         }
+
+        return root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -79,6 +91,7 @@ class DetailAIDialogFragment: DialogFragment() {
         mViewPager!!.adapter = null
         mViewPager!!.setBackgroundResource(0)
         mViewPager = null
+        data = null
         Handler().postDelayed({
             effectBgm!!.release()
         }, 2000)

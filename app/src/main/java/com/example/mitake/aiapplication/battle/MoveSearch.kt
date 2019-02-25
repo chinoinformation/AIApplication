@@ -30,17 +30,16 @@ class MoveSearch(context: Context, canmoveMap: Array<Array<Int>>, placeList: Lis
 
     /** 移動方向を取得 */
     private fun search4(routeAction: Int): List<Any>{
-        val res = when (routeAction){
+        return when (routeAction){
             1 -> listOf("side", -1)
             2 -> listOf("side", 1)
             3 -> listOf("updown", -1)
             else -> listOf("updown", 1)
         }
-        return res
     }
 
     /** 移動可能範囲と移動経路の算出 */
-    fun search(x: Int, y: Int, chip: Int, routeAction: Int, routeTmp: MutableList<Int>) {
+    private fun search(x: Int, y: Int, chip: Int, routeAction: Int, routeTmp: MutableList<Int>) {
         // 例外処理
         when (x) {
             -1, boardSize -> return

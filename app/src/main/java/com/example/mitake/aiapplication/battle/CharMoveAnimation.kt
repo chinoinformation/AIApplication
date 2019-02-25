@@ -23,7 +23,6 @@ class CharMoveAnimation(image: ImageView, place: List<List<ImageView>>, fragment
     private var set: AnimatorSet? = null
     private var objectAnimatorX: ObjectAnimator? = null
     private var objectAnimatorY: ObjectAnimator? = null
-    private var buttonChange = StatusChange()
 
     /** 最初のキャラの位置を確定 */
     fun init(saX: Float, moveX: Float, saY: Float, moveY: Float, duration: Long){
@@ -49,29 +48,6 @@ class CharMoveAnimation(image: ImageView, place: List<List<ImageView>>, fragment
             override fun onAnimationEnd(animation: Animator?) { set = null }
         })
 
-        set!!.start()
-    }
-
-
-    /** キャラアニメーション */
-    private fun charMoveAnimation(list: MutableList<Animator>, duration: Long){
-        set = AnimatorSet()
-        set!!.duration = duration
-        set!!.playSequentially(list)
-
-        // アニメーション終了した時の処理
-        set!!.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationStart(animation: Animator?) {}
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {
-                set = null
-                // 攻撃ボタンを有効化
-                buttonChange.ButtonEnabled(otherItems.attack!!)
-                // 終了ボタンを有効化
-                buttonChange.ButtonEnabled(otherItems.end!!)
-            }
-        })
         set!!.start()
     }
 
@@ -103,7 +79,7 @@ class CharMoveAnimation(image: ImageView, place: List<List<ImageView>>, fragment
     }
 
     /** キャラ移動の際に，異なるプレイヤーのキャラが重なることを防止する関数 */
-    fun optimizeCharMove(saX: Int, saY: Int, preX: Int, preY: Int, route: MutableList<Int>, duration: Long){
+    fun optimizeCharMove(saX: Int, saY: Int, preX: Int, preY: Int, route: MutableList<Int>, duration: Long): Pair<MutableList<Animator>, Long>{
         initList()
         convertList(preX, preY, route)
 
@@ -191,7 +167,7 @@ class CharMoveAnimation(image: ImageView, place: List<List<ImageView>>, fragment
 
         // アニメション
         val d = if (optimizeMoveList[0][0].lastIndex == 0) 0 else ((duration / count ) + 100)
-        charMoveAnimation(animatorList, d)
+        return Pair(animatorList, d)
     }
 
 }

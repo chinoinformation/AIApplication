@@ -22,4 +22,6 @@
     <color name="player1_color2">#7000BFFF</color>
     <color name="player2_color1">#FF4500</color>
     <color name="player2_color2">#70FF4500</color>
+
+    <color name="char_disappear_color">#80ff4500</color>
 </resources>

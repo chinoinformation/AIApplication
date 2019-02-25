@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.media.AudioManager
 import java.io.IOException
 import android.media.MediaPlayer.OnCompletionListener
+import com.example.mitake.aiapplication.data.DataManagement
 
 
 @Suppress("DEPRECATION")
@@ -28,6 +29,9 @@ class MyService : Service() {
     private val mp = arrayOfNulls<MediaPlayer>(3)
     // 現在の音量
     private var vol: Float = 0f
+
+    /** プリファレンス */
+    private var data: DataManagement? = null
 
     /**
      * internal listener which handles looping thing
@@ -79,10 +83,7 @@ class MyService : Service() {
                 }
                 // set nextMediaPlayer vol
                 mp[mpPlaying]!!.setVolume(vol, vol)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
+            } catch (e: Exception) {}
         }
     }
 
@@ -92,13 +93,18 @@ class MyService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
-            bgmId = intent.getIntExtra("id", 0)
             flag = intent.getIntExtra("flag", 0)
-            when (flag) {
-                1 -> pause()
-                2 -> play()
-                else -> if (preBgmId != bgmId) {
-                    startPlay()
+            if (flag == 3){
+                vol = intent.getFloatExtra("bgmLevel", 0.0f)
+                mp[mediaPlayerIndex]!!.setVolume(vol, vol)
+            } else {
+                bgmId = intent.getIntExtra("id", 0)
+                when (flag) {
+                    1 -> pause()
+                    2 -> play()
+                    else -> if (preBgmId != bgmId) {
+                        startPlay()
+                    }
                 }
             }
         }
@@ -111,15 +117,29 @@ class MyService : Service() {
         super.onDestroy()
         preBgmId = 0
         stop()
+        data = null
     }
 
     /** start */
     private fun startPlay(){
+        // プリファレンス
+        data = DataManagement(this)
         // AudioManagerを取得する
         val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
         // 現在の音量を取得する
-        val ringVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
-        vol = ringVolume.toFloat()
+        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+        val volData = data!!.readData("bgmLevel", "-1")[0].toFloat()
+        vol = if (volData == -1f){
+            ringVolume
+        } else {
+            if (volData in 0f..1f) {
+                ringVolume * volData
+            } else {
+                ringVolume
+            }
+        }
         play(bgmId)
         flag = 1
         startFlag = 1
@@ -138,6 +158,7 @@ class MyService : Service() {
         mp[1]!!.setNextMediaPlayer(mp[2])
 
         mp[0]!!.setVolume(vol, vol)
+        mp[1]!!.setVolume(vol, vol)
         mp[0]!!.start()
 
         mediaPlayerIndex = 0

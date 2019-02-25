@@ -1,11 +1,13 @@
 package com.example.mitake.aiapplication.battle.view
 
 import android.animation.*
+import android.content.Context
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.GradientDrawable
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -14,14 +16,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.battle.BattleActivity
 import com.example.mitake.aiapplication.battle.ConfirmCanAction
 import com.example.mitake.aiapplication.battle.ResetMap
 import com.example.mitake.aiapplication.battle.StatusChange
 import com.example.mitake.aiapplication.battle.data.Battle
+import com.example.mitake.aiapplication.battle.data.Place
+import com.example.mitake.aiapplication.battle.data.Player
 import com.example.mitake.aiapplication.bgm.EffectList
+import com.example.mitake.aiapplication.data.DataManagement
+import kotlinx.android.synthetic.main.fragment_change_images.*
 
 @Suppress("DEPRECATION")
 class ChangeImagesFragment : Fragment() {
@@ -36,7 +44,6 @@ class ChangeImagesFragment : Fragment() {
     private var charNum = Battle.CharNum.Value
 
     /** colorアニメーション */
-    var charturn = 0
     var density = 0f
     // ofArgbはApi21以降だけなのでofObjectを使う。Evaluatorを適切なものに設定すればいい
     private var fromColor = 0
@@ -55,6 +62,10 @@ class ChangeImagesFragment : Fragment() {
     /** ターン数 */
     var turn: Int = 1
     val maxTurn: Int = 10
+    var charturn = 0
+    private var playerturn = 0
+    private var charturn1 = 0
+    private var charturn2 = 0
 
     /** マップフラグ */
     var mapFlag: Int = 0
@@ -63,12 +74,15 @@ class ChangeImagesFragment : Fragment() {
     var index = 0
 
     /** 残キャラ数 */
+    var maxPlayerCharNum1 = 0
+    var maxPlayerCharNum2 = 0
     var playerCharNum1 = 0
     var playerCharNum2 = 0
 
     /** クラス */
     private var mainActivity: BattleActivity? = null
     private var statusChange: StatusChange? = null
+    private var data: DataManagement? = null
 
     /** BGM再生 */
     private var soundPool: SoundPool? = null
@@ -79,6 +93,15 @@ class ChangeImagesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_change_images, container, false)
 
+        // プリファレンスの呼び出し
+        data = DataManagement(context!!)
+
+        // AudioManagerを取得する
+        val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -89,6 +112,7 @@ class ChangeImagesFragment : Fragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("battle_start")
 
         turnText = root.findViewById(R.id.turn)
@@ -127,52 +151,107 @@ class ChangeImagesFragment : Fragment() {
         map!!.setOnClickListener { mapClick() }
 
         // 地図アイコンやキャラアイコンなどのクリック処理
-        for (i in 0..((2*charNum) - 1)) {
-            // キャラアイコンのクリックイベント
-            // 地図アイコンクリック時は機能追加
-            allPlayerImageList[i].setOnClickListener {
-                if (!mainActivity!!.applyAI[charturn]) {
-                    if (i != index) {
-                        if (mainActivity!!.imgList[i] != null) {
-                            focusChar(i)
-                            index = i
-                            mainActivity!!.leftStatusFragment!!.getUnitStatus(mainActivity!!.charPlaceList[i], mainActivity!!.unitList[i])
-                            mainActivity!!.leftStatusFragment!!.leftWatchStatus(
-                                    mainActivity!!.statusList[i],
-                                    mainActivity!!.unitList[i],
-                                    drawList[i],
-                                    mainActivity!!.parser!!.objects[mainActivity!!.numberList[i]].name,
-                                    mainActivity!!.charPlaceList[i]
-                            )
-                        }
-                    }
-                    if (mapFlag == 1 && mainActivity!!.imgList[i] != null) {
+        for (i in 0 until allPlayerImageList.size) {
+            charClickEvent(i)
+        }
+    }
+
+    private fun charClickEvent(i: Int){
+        // キャラアイコンのクリックイベント
+        // 地図アイコンクリック時は機能追加
+        allPlayerImageList[i].setOnClickListener {
+            if (!mainActivity!!.applyAI[charturn]) {
+                if (i != index) {
+                    if (mainActivity!!.imgList[i] != null) {
                         focusChar(i)
-                        ConfirmCanAction(
-                                mainActivity!!.imgList[i],
-                                mainActivity!!.charPlaceList[i],
-                                mainActivity!!.charMap,
-                                mainActivity!!.placeList,
-                                boardSize,
-                                mainActivity!!.parser!!.objects[mainActivity!!.numberList[i]].move.toInt() + 1,
-                                mainActivity!!.parser!!.objects[mainActivity!!.numberList[i]].attackRange.toInt() + 1,
-                                context!!,
-                                mainActivity!!.numberList[i]
-                        ).MoveAttackImg()
+                        index = i
+                        mainActivity!!.leftStatusFragment!!.getUnitStatus(mainActivity!!.charPlaceList[i], mainActivity!!.unitList[i])
+                        mainActivity!!.leftStatusFragment!!.leftWatchStatus(
+                                mainActivity!!.statusList[i],
+                                mainActivity!!.unitList[i],
+                                drawList[i],
+                                mainActivity!!.parser!!.objects[mainActivity!!.numberList[i]].name,
+                                mainActivity!!.charPlaceList[i]
+                        )
                     }
+                }
+                if (mapFlag == 1 && mainActivity!!.imgList[i] != null) {
+                    focusChar(i)
+                    ConfirmCanAction(
+                            mainActivity!!.imgList[i],
+                            mainActivity!!.charPlaceList[i],
+                            mainActivity!!.charMap,
+                            mainActivity!!.placeList,
+                            boardSize,
+                            mainActivity!!.parser!!.objects[mainActivity!!.numberList[i]].move.toInt() + 1,
+                            mainActivity!!.parser!!.objects[mainActivity!!.numberList[i]].attackRange.toInt() + 1,
+                            context!!,
+                            mainActivity!!.numberList[i]
+                    ).MoveAttackImg()
                 }
             }
         }
     }
 
+    /** キャラクター画像を動的に追加 */
+    fun calIndex(player: Player): Int{
+        return if (player == Player.Player1){
+            maxPlayerCharNum1
+        } else {
+            allPlayerImageList.lastIndex + 1
+        }
+    }
+
+    fun addCharImg(place: Place, charId: Int, index: Int){
+        val layout = change_images_layout
+        val metrics = context!!.resources.displayMetrics
+        val layoutParams = LinearLayout.LayoutParams((50*metrics.density+0.5f).toInt(), (40*metrics.density+0.5f).toInt())
+        layoutParams.setMargins((4*metrics.density+0.5f).toInt(), (4*metrics.density+0.5f).toInt(), (4*metrics.density+0.5f).toInt(), (4*metrics.density+0.5f).toInt())
+        layoutParams.weight = 1f
+        val charImg = ImageView(context!!)
+        charImg.setPadding((2*metrics.density+0.5f).toInt(), (2*metrics.density+0.5f).toInt(), (2*metrics.density+0.5f).toInt(), (2*metrics.density+0.5f).toInt())
+        charImg.layoutParams = layoutParams
+
+        when (place.player) {
+            Player.Player1 -> {
+                charImg.setBackgroundResource(R.drawable.background_player1)
+                mainActivity!!.charPlaceList.add(index, place)
+                mainActivity!!.charMap[mainActivity!!.charPlaceList[mainActivity!!.charPlaceList.lastIndex].Y][mainActivity!!.charPlaceList[mainActivity!!.charPlaceList.lastIndex].X] = 1
+                allPlayerImageList.add(index, charImg)
+                maxPlayerCharNum1 += 1
+                playerCharNum1 += 1
+            }
+            Player.Player2 -> {
+                charImg.setBackgroundResource(R.drawable.background_player2)
+                mainActivity!!.charPlaceList.add(place)
+                mainActivity!!.charMap[mainActivity!!.charPlaceList[mainActivity!!.charPlaceList.lastIndex].Y][mainActivity!!.charPlaceList[mainActivity!!.charPlaceList.lastIndex].X] = 2
+                allPlayerImageList.add(charImg)
+                maxPlayerCharNum2 += 1
+                playerCharNum2 += 1
+            }
+            else -> charImg.setBackgroundResource(R.drawable.background_none_player)
+        }
+        val charName = "char" + charId.toString() + "12"
+        drawList.add(resources.getIdentifier(charName, "drawable", activity!!.packageName))
+        Glide.with(activity!!.applicationContext).load(resources.getIdentifier(charName, "drawable", activity!!.packageName)).into(charImg)
+        // 地図アイコンやキャラアイコンなどのクリック処理
+        for (i in 0 until allPlayerImageList.size) {
+            allPlayerImageList[i].setOnClickListener(null)
+            charClickEvent(i)
+        }
+        layout.addView(charImg, index)
+    }
+
     /** スクロール位置を計算 */
     private fun calFocusCharPosition(index: Int): List<Int>{
-        val coordinateScrollView = mainActivity!!.calCoordinateScrollView()
-        val centerX = coordinateScrollView[0] + (mainActivity!!.scrollWidth / 2)
-        val centerY = coordinateScrollView[1] + (mainActivity!!.scrollHeight / 2)
+        val centerX = mainActivity!!.coordinateScrollView!![0] + (mainActivity!!.scrollWidth / 2)
+        val centerY = mainActivity!!.coordinateScrollView!![1] + (mainActivity!!.scrollHeight / 2)
         val imgLocation = IntArray(2)
         mainActivity!!.imgList[index]!!.getLocationOnScreen(imgLocation)
-        return listOf(imgLocation[0]+mainActivity!!.imgList[index]!!.width-centerX, imgLocation[1]+mainActivity!!.imgList[index]!!.height-centerY)
+        return listOf(
+                imgLocation[0]+mainActivity!!.hScroll!!.scrollX+mainActivity!!.imgList[index]!!.width-centerX,
+                imgLocation[1]+mainActivity!!.vScroll!!.scrollY+mainActivity!!.imgList[index]!!.height-centerY
+        )
     }
 
     /** スクロール位置を変更 */
@@ -183,7 +262,8 @@ class ChangeImagesFragment : Fragment() {
     }
 
     /** スクロールアニメーション */
-    private fun focusAnim(position: List<Int>, duration: Long){
+    private fun focusAnim(position: List<Int>, duration: Long, damageEnd: Boolean){
+        mainActivity!!.canScroll = false
         scrolling = true
         set = AnimatorSet()
         set!!.duration = duration
@@ -204,34 +284,44 @@ class ChangeImagesFragment : Fragment() {
                 objectAnimatorH2 = null
                 scrolling = false
                 if (mainActivity!!.initialCount == 1) {
+                    // AudioManagerを取得する
+                    val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    // 最大音量値を取得
+                    val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+                    // 現在の音量を取得する
+                    val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                     // バトル開始のアニメーション
                     effectBgm!!.play("battle_start")
                     mainActivity!!.otherImagesFragment!!.battleStartAnimation1()
                 }
+                if (damageEnd) mainActivity!!.damageEnd()
             }
         })
         set!!.start()
     }
 
-    /** ターン開始時・攻撃時のスクロールアニメーション */
+    /** 戦闘開始時のスクロールアニメーション */
     fun focusCharAnim0(X: Int, Y: Int){
         val position = listOf(X, Y)
-        focusAnim(position, 1500)
+        focusAnim(position, 1500, false)
     }
 
     /** ターン開始時・攻撃時のスクロールアニメーション */
-    fun focusCharAnim(index: Int){
+    fun focusCharAnim(index: Int, duration: Long, damageEnd: Boolean){
         val position = calFocusCharPosition(index)
-        focusAnim(position, 700)
+        focusAnim(position, duration, damageEnd)
     }
 
     /** 移動時のスクロールアニメーション */
     fun focusCharMoveAnim(X: Int, Y: Int){
-        val coordinateScrollView = mainActivity!!.calCoordinateScrollView()
-        val centerX = coordinateScrollView[0] + (mainActivity!!.scrollWidth / 2)
-        val centerY = coordinateScrollView[1] + (mainActivity!!.scrollHeight / 2)
-        val position = listOf(X+(mainActivity!!.imgList[0]!!.width/2)-centerX, Y+(mainActivity!!.imgList[0]!!.height/2)-centerY)
-        focusAnim(position, 700)
+        val centerX = mainActivity!!.coordinateScrollView!![0] + (mainActivity!!.scrollWidth / 2)
+        val centerY = mainActivity!!.coordinateScrollView!![1] + (mainActivity!!.scrollHeight / 2)
+        val position = listOf(
+                X+mainActivity!!.hScroll!!.scrollX-(mainActivity!!.imgList[mainActivity!!.changeImagesFragment!!.charturn]!!.width/2)-centerX,
+                Y+mainActivity!!.vScroll!!.scrollY-(mainActivity!!.imgList[mainActivity!!.changeImagesFragment!!.charturn]!!.height/2)-centerY
+        )
+        focusAnim(position, 1000, false)
     }
 
     /** 戦闘不能時のキャラ画像をグレースケールに変更 */
@@ -302,18 +392,10 @@ class ChangeImagesFragment : Fragment() {
      * 残キャラ数更新
      * mode == 0 -> 残キャラ数増加．初期化時に使用
      * mode == 1 -> 残キャラ数減少．バトル時に使用
+     * 残キャラ数によってキャラの攻撃力が変化
+     * 残キャラ数差 -> 1: 1.5倍，2: 2.0倍，3: 2.5倍
      */
     fun updatePlayerCharNum(index: Int, mode: Int){
-        /*
-        val num = when (mode){
-            0 -> 1
-            else -> -1
-        }
-        when {
-            index < charNum -> playerCharNum1 += num
-            else -> playerCharNum2 += num
-        }
-        */
         when (mode) {
             0 -> {
                 when {
@@ -345,6 +427,12 @@ class ChangeImagesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /** 最大キャラ数計算 */
+    fun calMaxCharNum(){
+        maxPlayerCharNum1 = playerCharNum1
+        maxPlayerCharNum2 = playerCharNum2
     }
 
     /**
@@ -383,25 +471,33 @@ class ChangeImagesFragment : Fragment() {
         animator = null
     }
 
-    /** charTurn更新 */
-    private fun calDivideCharTurn(){
-        val quotient = charturn % charNum
-        val remainder = charturn / charNum
-        if (remainder == 0){
-            charturn += charNum
-        } else {
-            if (quotient < charNum - 1) {
-                charturn -= charNum
-                charturn += 1
-            } else {
-                charturn = 0
-            }
+    /** playerTurn更新 */
+    private fun updatePlayerTurn(){
+        playerturn = when (playerturn) {
+            0 -> 1
+            else -> 0
         }
     }
+
+    /** charTrun計算 */
+    private fun calCharTurn(){
+        updatePlayerTurn()
+        if (playerturn == 0){
+            charturn1 += 1
+            if (charturn1 >= maxPlayerCharNum1) charturn1 = 0
+            charturn = charturn1
+        } else {
+            if (turn > 1 || charturn1 > 0) charturn2 += 1
+            if (charturn2 >= maxPlayerCharNum2) charturn2 = 0
+            charturn = maxPlayerCharNum1 + charturn2
+        }
+    }
+
+    /** charTurn更新 */
     fun updateCharTurn(imgList: MutableList<ImageView?>){
-        calDivideCharTurn()
+        calCharTurn()
         while (imgList[charturn] == null) {
-            calDivideCharTurn()
+            calCharTurn()
         }
         index = charturn
     }
@@ -429,6 +525,7 @@ class ChangeImagesFragment : Fragment() {
         toColor = 0
 
         statusChange = null
+        data = null
         effectBgm!!.release()
     }
 

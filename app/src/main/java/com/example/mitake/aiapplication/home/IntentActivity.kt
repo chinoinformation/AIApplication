@@ -21,8 +21,8 @@ class IntentActivity : AppCompatActivity() {
     private var bgmFlag: Int = 0
 
     private var loading: Loading? = null
-    private lateinit var activityName: String
-    private var time: Long = 1500
+    private var activityName: String = ""
+    private var time: Long = 900
 
     private val mHandler = Handler()
     private var updateText: Runnable? = null
@@ -37,11 +37,11 @@ class IntentActivity : AppCompatActivity() {
     }
 
     /** 画面遷移する関数 */
-    private fun ActivityTransition(name: String){
-        if (name == "Battle"){
-            time = 3500
+    private fun activityTransition(name: String){
+        if (name == "Main" || name == "OpeningStory" || name == "Battle"){
+            time = 1800
+            loading!!.show()
         }
-        if (name == "Main" || name == "OpeningStory" || name == "Battle") loading!!.show()
         // 画面遷移処理
         updateText = Runnable {
             if (count > 0){
@@ -106,6 +106,17 @@ class IntentActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
+                // TutorialStoryActivity に遷移させる
+                    "TutorialStory" -> {
+                        val title = intent.getStringExtra("tutorial_title")
+                        val storyNum = intent.getIntExtra("story_number", 0)
+                        val intent = Intent(this, TutorialStoryActivity::class.java)
+                        intent.putExtra("tutorial_title", title)
+                        intent.putExtra("story_number", storyNum)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                        finish()
+                    }
                 // TutorialActivity に遷移させる
                     "Practice" -> {
                         val intent = Intent(this, PracticeActivity::class.java)
@@ -120,9 +131,9 @@ class IntentActivity : AppCompatActivity() {
                         overridePendingTransition(R.animator.open_enter_fade_in, R.animator.open_exit_fade_out)
                         finish()
                     }
-                // StoryActivity に遷移させる
+                // TutorialStoryActivity に遷移させる
                     "Story" -> {
-                        val intent = Intent(this, StoryActivity::class.java)
+                        val intent = Intent(this, TutorialStoryActivity::class.java)
                         startActivity(intent)
                         overridePendingTransition(R.animator.open_enter_fade_in, R.animator.open_exit_fade_out)
                         finish()
@@ -173,11 +184,12 @@ class IntentActivity : AppCompatActivity() {
         }
 
         count = 0
-        ActivityTransition(activityName)
+        activityTransition(activityName)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+
         loading!!.close()
         loading = null
     }

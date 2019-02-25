@@ -11,11 +11,6 @@ import android.widget.TextView
 internal class UpTextView : TextView {
     var defautText: Spanned? = null
 
-    /** Meta Data */
-    var i = 0
-    var putWord = ""
-    var putText = ""
-
     var value: Long = 0xffffffff
     var value0: Long = 0x00ffffff
 
@@ -25,7 +20,7 @@ internal class UpTextView : TextView {
 
     var count = 1
 
-    var trans = -5f
+    var trans = 5f
 
     /** アニメーション制御変数 */
     var canStart = true
@@ -36,21 +31,20 @@ internal class UpTextView : TextView {
         override fun dispatchMessage(msg: Message) {
             val interval = INTERVAL
 
-            if (msg.what == TIMEOUT_MESSAGE) {
-                if (canStart) {
+            if (canStart) {
+                if (msg.what == TIMEOUT_MESSAGE) {
                     text = defautText
                     tranY -= trans
                     translationY = tranY
                     this.sendEmptyMessageDelayed(TIMEOUT_MESSAGE, (interval).toLong())
+                } else {
+                    super.dispatchMessage(msg)
                 }
-            } else {
-                super.dispatchMessage(msg)
             }
         }
     }
 
     fun startCharByCharAnim() {
-        initMetaData()
         canStart = true
         handler.sendEmptyMessage(TIMEOUT_MESSAGE)
     }
@@ -74,12 +68,6 @@ internal class UpTextView : TextView {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
-
-    private fun initMetaData() {
-        i = 0
-        putWord = ""
-        putText = ""
-    }
 
     companion object {
         const val TIMEOUT_MESSAGE = 1

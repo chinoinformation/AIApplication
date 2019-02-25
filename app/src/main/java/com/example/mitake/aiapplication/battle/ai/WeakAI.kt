@@ -3,6 +3,7 @@ package com.example.mitake.aiapplication.battle.ai
 import android.content.Context
 import android.widget.ImageView
 import com.example.mitake.aiapplication.battle.Attack
+import com.example.mitake.aiapplication.battle.CharSearch
 import com.example.mitake.aiapplication.battle.MoveSearch
 import com.example.mitake.aiapplication.battle.data.Battle
 import com.example.mitake.aiapplication.battle.data.Place
@@ -22,9 +23,9 @@ class WeakAI(context: Context, placeList: List<List<ImageView>>): AIEvent {
     private var attackOption: MutableList<MutableList<List<Int>>> = mutableListOf()
     private var optimizeAttack: MutableList<List<Int>> = mutableListOf()
 
-    override fun computeNext(myPosition: Place, moveChip: Int, attackChip: Int, charMap: Array<Array<Int>>): Place {
+    override fun computeNext(myPosition: Place, moveChip: Int, attackChip: Int, charMap: Array<Array<Int>>): Pair<Place, MutableList<Map<Int, MutableList<Int>>>> {
         // 移動可能範囲算出
-        MoveSearch(mContext, mCanMoveMap, mPlaceList, charMap, myPosition).getMoveRange(moveChip, 1)
+        val route = MoveSearch(mContext, mCanMoveMap, mPlaceList, charMap, myPosition).getMoveRange(moveChip, 0)
         val charPlace = Place(myPosition.X, myPosition.Y, myPosition.player)
         val positionList: MutableList<List<Int>> = mutableListOf()
         val moveEvaluation: MutableList<Int> = mutableListOf()
@@ -46,11 +47,10 @@ class WeakAI(context: Context, placeList: List<List<ImageView>>): AIEvent {
         // 評価値から最適解を算出
         val resIndex = optimizeAct(moveEvaluation, attackEvaluation)
         optimizeAttack = attackOption[resIndex]
-        return Place(positionList[resIndex][0], positionList[resIndex][1], myPosition.player)
+        return Pair(Place(positionList[resIndex][0], positionList[resIndex][1], myPosition.player), route)
     }
 
     override fun computeAttack(myPosition: Place): Place {
-        mAttackMap = Array(boardSize, { Array(boardSize, { 0 }) })
         return if (canAttack) {
             val random = Random().nextInt(optimizeAttack.size)%optimizeAttack.size
             Place(optimizeAttack[random][0], optimizeAttack[random][1], myPosition.player)
@@ -132,14 +132,15 @@ class WeakAI(context: Context, placeList: List<List<ImageView>>): AIEvent {
 
     fun resetMap(){
         mCanMoveMap = Array(boardSize, { Array(boardSize, { 0 }) })
+        mAttackMap = Array(boardSize, { Array(boardSize, { 0 }) })
         attackOption = mutableListOf()
         optimizeAttack = mutableListOf()
     }
 
     fun init(){
-        resetMap()
         boardSize = 0
         mCanMoveMap = arrayOf()
+        mAttackMap = arrayOf()
         unit = mutableListOf()
         attackOption = mutableListOf()
         optimizeAttack = mutableListOf()

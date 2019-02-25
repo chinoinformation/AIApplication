@@ -49,10 +49,10 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.982"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.111" />
 
     <ImageView
         android:id="@+id/main_char2"
@@ -150,7 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@drawable/drawable_quest_constraint"
-            android:text="はい"
+            android:text="@string/yes"
             android:textColor="#ffffff"
             android:textStyle="bold" />
 
@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:background="@drawable/drawable_quest_battle_background"
-            android:text="いいえ"
+            android:text="@string/no"
             android:textColor="#ffffff"
             android:textStyle="bold" />
 

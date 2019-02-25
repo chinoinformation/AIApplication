@@ -1,6 +1,8 @@
 package com.example.mitake.aiapplication.battle.view
 
+import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.ViewFlipper
 import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.battle.*
@@ -19,6 +23,8 @@ import kotlinx.android.synthetic.main.attack_buttons.view.*
 import kotlinx.android.synthetic.main.buttons.view.*
 import kotlinx.android.synthetic.main.fragment_other_items.view.*
 import com.example.mitake.aiapplication.battle.menu.AttackAbilityDialogFragment
+import com.example.mitake.aiapplication.data.DataManagement
+import kotlinx.android.synthetic.main.use_ai.view.*
 
 
 class OtherItemsFragment : Fragment() {
@@ -32,6 +38,8 @@ class OtherItemsFragment : Fragment() {
     var specialAttack: Button? = null
     var attackMove: Button? = null
     var attackEnd: Button? = null
+    private var loadText: TextView? = null
+    private var progress: ProgressBar? = null
 
     /** 移動と攻撃のフラグ */
     var moveFlag: Int = 0
@@ -40,16 +48,29 @@ class OtherItemsFragment : Fragment() {
     /** クラス */
     private var statusChange: StatusChange? = null
     private var mainActivity: BattleActivity? = null
+    private var data: DataManagement? = null
 
     /** BGM再生 */
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_other_items, container, false)
 
+        // プリファレンスの呼び出し
+        data = DataManagement(context!!)
+
+        // AudioManagerを取得する
+        am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -60,6 +81,7 @@ class OtherItemsFragment : Fragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("other_button")
 
         flipper = root.findViewById(R.id.button_flipper)
@@ -72,6 +94,9 @@ class OtherItemsFragment : Fragment() {
         attackMove = flipper!!.attack.attack_move_button
         attackEnd = flipper!!.attack.attack_end_button
 
+        loadText = flipper!!.using_ai.text_communication_load
+        progress = flipper!!.using_ai.progress_communication_load
+
         return root
     }
 
@@ -82,6 +107,7 @@ class OtherItemsFragment : Fragment() {
         mainActivity = (activity as BattleActivity)
 
         attack!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             attack(0)
             statusChange!!.ButtonNotEnabled(normalAttack!!)
@@ -89,16 +115,19 @@ class OtherItemsFragment : Fragment() {
         }
 
         move!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             move()
         }
 
         end!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             mainActivity!!.end()
         }
 
         normalMenu!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             normalMenu!!.isEnabled = false
             val newFragment = MenuDialogFragment.newInstance("クエスト名", mainActivity!!.changeImagesFragment!!.maxTurn, mainActivity!!.changeImagesFragment!!.turn, mainActivity!!.dataLog!!.log!!)
@@ -152,16 +181,19 @@ class OtherItemsFragment : Fragment() {
         }
 
         normalAttack!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             attack(0)
         }
 
         specialAttack!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             attack(1)
         }
 
         attackMove!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             ResetMap(mainActivity!!.canmoveMap, mainActivity!!.attackMap, mainActivity!!.placeList).resetList()
             move()
@@ -170,6 +202,7 @@ class OtherItemsFragment : Fragment() {
         }
 
         attackEnd!!.setOnClickListener {
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             buttonChange(0)
             mainActivity!!.end()
@@ -245,6 +278,16 @@ class OtherItemsFragment : Fragment() {
         }
     }
 
+    fun load(){
+        loadText!!.visibility = View.VISIBLE
+        progress!!.visibility = View.VISIBLE
+    }
+
+    fun finishLoad(){
+        loadText!!.visibility = View.INVISIBLE
+        progress!!.visibility = View.INVISIBLE
+    }
+
     /** ボタン切り替え */
     fun buttonChange(mode: Int){
         flipper!!.inAnimation = AnimationUtils.loadAnimation(activity!!.applicationContext, android.R.anim.slide_in_left)
@@ -315,6 +358,10 @@ class OtherItemsFragment : Fragment() {
         attackFlag = 0
 
         statusChange = null
+        data = null
+        am = null
+        mVol = 0f
+        ringVolume = 0f
 
         effectBgm!!.release()
     }

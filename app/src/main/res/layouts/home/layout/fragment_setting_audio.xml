@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_quest1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/audio_setting"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="32sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bgm_setting"
+            android:layout_margin="8dp"
+            android:textSize="24sp"
+            />
+        <SeekBar
+            android:id="@+id/bgmVolSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#ccc"
+            android:max="100"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp">
+        </SeekBar>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/effect_setting"
+            android:layout_margin="8dp"
+            android:textSize="24sp"
+            />
+        <SeekBar
+            android:id="@+id/effectVolSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#ccc"
+            android:max="100"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp">
+        </SeekBar>
+
+        <com.example.mitake.aiapplication.custom_layout.PushButton
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:background="@drawable/drawable_quest_constraint"
+            android:text="@string/back"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:soundEffectsEnabled="false"/>
+
+    </LinearLayout>
+
+</FrameLayout>

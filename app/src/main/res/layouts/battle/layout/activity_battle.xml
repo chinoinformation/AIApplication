@@ -84,31 +84,38 @@
             android:text=""
             android:textStyle="bold"/>
 
-        <com.example.mitake.aiapplication.custom_layout.VScroll
-            android:id="@+id/vScroll"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:scrollbars="none"
-            android:fillViewport="true"
             android:layout_margin="2dp">
 
-            <com.example.mitake.aiapplication.custom_layout.HScroll
-                android:id="@+id/hScroll"
+            <com.example.mitake.aiapplication.custom_layout.VScroll
+                android:id="@+id/vScroll"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scrollbars="none"
+                android:fillViewport="true">
 
-                <fragment
-                    android:id="@+id/scroll_map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:name="com.example.mitake.aiapplication.battle.view.ScrollMapFragment"
-                    tools:layout="@layout/fragment_scroll_map"/>
+                <com.example.mitake.aiapplication.custom_layout.HScroll
+                    android:id="@+id/hScroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
-            </com.example.mitake.aiapplication.custom_layout.HScroll>
+                    <fragment
+                        android:id="@+id/scroll_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:name="com.example.mitake.aiapplication.battle.view.ScrollMapFragment"
+                        tools:layout="@layout/fragment_scroll_map"/>
 
-        </com.example.mitake.aiapplication.custom_layout.VScroll>
+                </com.example.mitake.aiapplication.custom_layout.HScroll>
+
+            </com.example.mitake.aiapplication.custom_layout.VScroll>
+
+        </FrameLayout>
 
     </LinearLayout>
 

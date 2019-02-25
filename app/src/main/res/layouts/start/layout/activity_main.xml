@@ -46,8 +46,8 @@
 
         <com.example.mitake.aiapplication.custom_layout.PushButton
             android:id="@+id/menu"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="110dp"
+            android:layout_height="50dp"
             android:layout_margin="12dp"
             android:background="@drawable/button_off_background"
             android:gravity="center"

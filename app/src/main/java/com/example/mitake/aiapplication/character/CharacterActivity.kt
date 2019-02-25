@@ -1,20 +1,19 @@
 package com.example.mitake.aiapplication.character
 
+import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.bumptech.glide.Glide
 import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.bgm.MyService
+import com.example.mitake.aiapplication.data.DataManagement
 import com.example.mitake.aiapplication.home.MainButtonFragment
 import kotlinx.android.synthetic.main.activity_character.*
 
@@ -26,6 +25,12 @@ class CharacterActivity : AppCompatActivity() {
     /** BGM再生 */
     private var bgmId = R.raw.bgm_home
     private var bgmFlag = 0
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
+
+    /** プリファレンス */
+    private var data: DataManagement? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,23 +59,34 @@ class CharacterActivity : AppCompatActivity() {
         mainButton.arguments = bundle
         t.add(R.id.char_main_button, mainButton, "main_button")
         t.commit()
-
     }
 
+    /** 音量設定 */
+    @Suppress("DEPRECATED_IDENTITY_EQUALS")
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_character, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.action_settings) {
-            return true
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
         }
 
-        return super.onOptionsItemSelected(item)
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -90,26 +106,6 @@ class CharacterActivity : AppCompatActivity() {
         }
     }
 
-    class PlaceholderFragment : Fragment() {
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                                  savedInstanceState: Bundle?): View? {
-            val rootView = inflater.inflate(R.layout.fragment_character, container, false)
-            return rootView
-        }
-
-        companion object {
-            private val ARG_SECTION_NUMBER = "section_number"
-            fun newInstance(sectionNumber: Int): PlaceholderFragment {
-                val fragment = PlaceholderFragment()
-                val args = Bundle()
-                args.putInt(ARG_SECTION_NUMBER, sectionNumber)
-                fragment.arguments = args
-                return fragment
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         // プレイヤーの処理
@@ -121,6 +117,15 @@ class CharacterActivity : AppCompatActivity() {
             intent.putExtra("flag", 0)
             startService(intent)
             bgmFlag = 1
+
+            // AudioManagerを取得する
+            am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            // 最大音量値を取得
+            mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            // プリファレンスの呼び出し
+            data = DataManagement(this)
         } else {
             intent.putExtra("flag", 2)
             startService(intent)
@@ -140,6 +145,10 @@ class CharacterActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
+        data = null
+        am = null
+        mVol = 0f
+        ringVolume = 0f
         Glide.get(this).clearMemory()
     }
 

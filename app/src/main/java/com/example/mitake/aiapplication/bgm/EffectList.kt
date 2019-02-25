@@ -10,6 +10,8 @@ class EffectList(context: Context, soundPool: SoundPool?) {
     private var soundIdList: Map<String, Int> = mapOf()
     var soundList: MutableMap<String, Int> = mutableMapOf()
 
+    private var vol = 1.0f
+
     fun getList(name: String){
         soundIdList = mapOf("start" to mContext.resources.getIdentifier("bgm_effect_start", "raw", mContext.packageName),
                 "battle_start" to mContext.resources.getIdentifier("bgm_effect_battle_start", "raw", mContext.packageName),
@@ -23,17 +25,23 @@ class EffectList(context: Context, soundPool: SoundPool?) {
                 "button" to mContext.resources.getIdentifier("bgm_effect_button", "raw", mContext.packageName),
                 "other_button" to mContext.resources.getIdentifier("bgm_effect_other_button", "raw", mContext.packageName),
                 "update_ai" to mContext.resources.getIdentifier("bgm_effect_update_ai", "raw", mContext.packageName),
-                "go_battle" to mContext.resources.getIdentifier("bgm_effect_go_battle", "raw", mContext.packageName))
+                "go_battle" to mContext.resources.getIdentifier("bgm_effect_go_battle", "raw", mContext.packageName),
+                "bell" to mContext.resources.getIdentifier("bgm_effect_bell", "raw", mContext.packageName),
+                "money" to mContext.resources.getIdentifier("bgm_effect_money", "raw", mContext.packageName))
         soundId = soundIdList[name]?.let { mSoundPool!!.load(mContext, it, 1) }!!
         soundList[name] = soundId
     }
 
     fun play(name: String){
-        soundList[name]?.let { mSoundPool!!.play(it, 1f, 1f, 0, 0, 1.0f) }
+        soundList[name]?.let { mSoundPool!!.play(it, vol, vol, 0, 0, 1.0f) }
     }
 
     fun release(){
         mSoundPool!!.release()
+    }
+
+    fun setVol(changeVol: Float){
+        vol = changeVol
     }
 
     fun unload(name: String){

@@ -4,12 +4,15 @@ package com.example.mitake.aiapplication.quest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -20,6 +23,7 @@ import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.bgm.EffectList
 import com.example.mitake.aiapplication.bgm.MyService
 import com.example.mitake.aiapplication.custom_layout.quest.DetailAIDialogFragment
+import com.example.mitake.aiapplication.data.DataManagement
 import com.example.mitake.aiapplication.home.IntentActivity
 
 import java.util.*
@@ -41,7 +45,7 @@ class PracticeActivity : AppCompatActivity() {
     private var radioGroupType: RadioGroup? = null
     private var mainCharSpeech: TextView? = null
     private var speechList: MutableList<String> = mutableListOf()
-    private var data: Array<Any> = arrayOf(4, 10, "A I")
+    private var parameter: Array<Any> = arrayOf(4, 10, "A I")
 
     /** ボタン */
     private var backHome: Button? = null
@@ -58,6 +62,12 @@ class PracticeActivity : AppCompatActivity() {
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
+
+    /** プリファレンス */
+    private var data: DataManagement? = null
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,9 +155,39 @@ class PracticeActivity : AppCompatActivity() {
             mainCharPosition.getLocationOnScreen(location)
             charAnim(mainChar!!, 0f, location[0].toFloat()-80f, 0f, location[1].toFloat(),0)
             // メインキャラのアニメーション
-            Glide.with(applicationContext).load(R.drawable.app_souta_touka).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).into(mainChar!!)
+            Glide.with(applicationContext).load(R.drawable.ririi_1).apply(RequestOptions().format(DecodeFormat.PREFER_RGB_565)).into(mainChar!!)
             mainChar!!.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.animator.updown))
         }
+    }
+
+    /** 音量設定 */
+    @Suppress("DEPRECATED_IDENTITY_EQUALS")
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+            val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+            val bgmVol = bgmLevel * ringVolume
+            val intent = Intent(applicationContext, MyService::class.java)
+            intent.putExtra("flag", 3)
+            intent.putExtra("bgmLevel", bgmVol)
+            startService(intent)
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     /**
@@ -189,10 +229,10 @@ class PracticeActivity : AppCompatActivity() {
 
     /** データ取得 */
     private fun getData(){
-        data[0] = numberPickerChar!!.value
-        data[1] = numberPickerTurn!!.value
+        parameter[0] = numberPickerChar!!.value
+        parameter[1] = numberPickerTurn!!.value
         val checkedRadioButton = findViewById<RadioButton>(radioGroupType!!.checkedRadioButtonId)
-        data[2] = checkedRadioButton.text
+        parameter[2] = checkedRadioButton.text
     }
 
     override fun onResume() {
@@ -207,8 +247,13 @@ class PracticeActivity : AppCompatActivity() {
             startService(intent)
             bgmFlag = 1
 
+            // AudioManagerを取得する
+            am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            // 最大音量値を取得
+            mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+            // 現在の音量を取得する
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             // SoundPool の設定
-            Thread.sleep(1000)
             audioAttributes = AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
@@ -218,6 +263,10 @@ class PracticeActivity : AppCompatActivity() {
                     .setMaxStreams(2)
                     .build()
             effectBgm = EffectList(applicationContext, soundPool)
+
+            // プリファレンスの呼び出し
+            data = DataManagement(this)
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.getList("go_battle")
             effectBgm!!.getList("button")
             effectBgm!!.getList("other_button")
@@ -263,6 +312,11 @@ class PracticeActivity : AppCompatActivity() {
         backQuest = null
         startQuest = null
         detailAI = null
+
+        data = null
+        am = null
+        mVol = 0f
+        ringVolume = 0f
 
         Glide.get(this).clearMemory()
         Handler().postDelayed({

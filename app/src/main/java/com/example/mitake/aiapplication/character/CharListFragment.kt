@@ -1,6 +1,8 @@
 package com.example.mitake.aiapplication.character
 
+import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -17,6 +19,7 @@ import com.example.mitake.aiapplication.custom_layout.character.CharData
 import com.example.mitake.aiapplication.custom_layout.character.CharListAdapter
 import com.example.mitake.aiapplication.custom_layout.character.CustomCharList
 import com.example.mitake.aiapplication.custom_layout.character.CustomCharStatus
+import com.example.mitake.aiapplication.data.DataManagement
 
 
 @Suppress("DEPRECATION")
@@ -36,10 +39,22 @@ class CharListFragment : Fragment() {
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
 
+    /** プリファレンス */
+    private var data: DataManagement? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_char_list, container, false)
 
+        // プリファレンスの呼び出し
+        data = DataManagement(context!!)
+
+        // AudioManagerを取得する
+        val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -50,6 +65,7 @@ class CharListFragment : Fragment() {
                 .setMaxStreams(2)
                 .build()
         effectBgm = EffectList(activity!!.applicationContext, soundPool)
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.getList("other_button")
 
         // csvデータを読み込み
@@ -127,8 +143,15 @@ class CharListFragment : Fragment() {
         customCharList!!.customStatus!!.attackRange.text = data.attackRange
     }
 
+    /** タップしたキャラのステータス取得 */
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-        // タップしたキャラのステータス取得
+        // AudioManagerを取得する
+        val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // 最大音量値を取得
+        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        // 現在の音量を取得する
+        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.play("other_button")
         statusView(parser.objects[position+1], position+1)
         listPosition = position + 1
@@ -157,6 +180,7 @@ class CharListFragment : Fragment() {
         customCharList = null
 
         glideAnim = null
+        data = null
     }
 
 }

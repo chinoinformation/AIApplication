@@ -37,9 +37,6 @@ class CsvReader {
                 objects.add(data)
             }
             bufferReader.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
+        } catch (e: IOException) {}
     }
 }
