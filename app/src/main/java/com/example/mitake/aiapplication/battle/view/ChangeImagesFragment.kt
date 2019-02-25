@@ -257,8 +257,7 @@ class ChangeImagesFragment : Fragment() {
     /** スクロール位置を変更 */
     private fun focusChar(index: Int){
         val position = calFocusCharPosition(index)
-        mainActivity!!.vScroll!!.scrollBy(position[0], position[1])
-        mainActivity!!.hScroll!!.scrollBy(position[0], position[1])
+        focusAnim(position, 0, false)
     }
 
     /** スクロールアニメーション */

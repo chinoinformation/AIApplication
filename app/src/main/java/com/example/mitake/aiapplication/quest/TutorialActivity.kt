@@ -34,12 +34,7 @@ class TutorialActivity : AppCompatActivity() {
     private var storyTitle = mutableListOf<String>(
             "ニューラルネットワークの起源",
             "ディープラーニングとは？",
-            "CNNとは？",
-            "パラメータ(1) 訓練データ",
-            "パラメータ(2) 層数",
-            "パラメータ(3) 活性化関数",
-            "パラメータ(4) エポック数",
-            "パラメータ(5) バッチ数"
+            "CNNとは？"
     )
 
     // BGM再生

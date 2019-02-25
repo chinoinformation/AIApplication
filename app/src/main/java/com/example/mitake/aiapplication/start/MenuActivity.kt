@@ -23,6 +23,7 @@ import com.example.mitake.aiapplication.home.SiteDialogFragment
 class MenuActivity : AppCompatActivity() {
 
     /** ボタン */
+    private var repairButton: Button? = null
     private var resetButton: Button? = null
     private var siteButton: Button? = null
     private var returnButton: ImageButton? = null
@@ -54,6 +55,18 @@ class MenuActivity : AppCompatActivity() {
             effectBgm!!.play("other_button")
             finish()
             overridePendingTransition(R.animator.act_close_enter_anim, R.animator.act_close_exit_anim)
+        }
+
+        repairButton = findViewById(R.id.data_repair)
+        repairButton!!.setOnClickListener {
+            repairButton!!.setOnClickListener(null)
+            effectBgm!!.play("other_button")
+            val intent = Intent(this, IntentActivity::class.java)
+            intent.putExtra("Name", "Main")
+            intent.putExtra("musicId", bgmId)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
         }
 
         /**
@@ -183,6 +196,9 @@ class MenuActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
+        repairButton!!.setOnClickListener(null)
+        repairButton!!.setBackgroundResource(0)
+        repairButton = null
         resetButton!!.setOnClickListener(null)
         resetButton!!.setBackgroundResource(0)
         resetButton = null
