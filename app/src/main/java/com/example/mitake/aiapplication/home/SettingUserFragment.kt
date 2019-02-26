@@ -119,6 +119,7 @@ class SettingUserFragment: Fragment() {
         mainChar!!.setBackgroundResource(R.drawable.icon_round)
 
         OKButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             OKButton!!.setOnClickListener(null)

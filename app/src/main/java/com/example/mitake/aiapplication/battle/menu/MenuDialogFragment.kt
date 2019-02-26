@@ -12,11 +12,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.text.Html
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.battle.BattleActivity
 import com.example.mitake.aiapplication.bgm.EffectList
+import com.example.mitake.aiapplication.bgm.MyService
 import com.example.mitake.aiapplication.data.DataManagement
 import com.example.mitake.aiapplication.home.IntentActivity
 import kotlinx.android.synthetic.main.menu.view.*
@@ -48,7 +50,7 @@ class MenuDialogFragment: DialogFragment() {
         // 最大音量値を取得
         val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
         // 現在の音量を取得する
-        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+        var ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
 
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
@@ -82,6 +84,7 @@ class MenuDialogFragment: DialogFragment() {
         // 戦闘ログボタンを押す
         val battleLog: Button = alertView.findViewById(R.id.battle_log)
         battleLog.setOnClickListener {
+            ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
 
@@ -96,6 +99,7 @@ class MenuDialogFragment: DialogFragment() {
         // リタイアボタンを押す
         val retire: Button = alertView.findViewById(R.id.retire)
         retire.setOnClickListener {
+            ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             // 画面遷移
@@ -112,6 +116,7 @@ class MenuDialogFragment: DialogFragment() {
         // キャンセルボタンを押す
         val cancel: Button = alertView.findViewById(R.id.cancel)
         cancel.setOnClickListener {
+            ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             getDialog().dismiss()
@@ -123,6 +128,35 @@ class MenuDialogFragment: DialogFragment() {
 
         // Dialogを生成
         dialog = alert!!.create()
+        dialog!!.setOnKeyListener({ _, keyCode, _ ->
+            when (keyCode) {
+                KeyEvent.KEYCODE_VOLUME_UP -> {
+                    // 現在の音量を取得する
+                    ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat() * ringVolume)
+                    val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                    val bgmVol = bgmLevel * ringVolume
+                    val intent = Intent(activity!!.applicationContext, MyService::class.java)
+                    intent.putExtra("flag", 3)
+                    intent.putExtra("bgmLevel", bgmVol)
+                    activity!!.startService(intent)
+                    false
+                }
+                KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                    // 現在の音量を取得する
+                    ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+                    val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                    val bgmVol = bgmLevel * ringVolume
+                    val intent = Intent(activity!!.applicationContext, MyService::class.java)
+                    intent.putExtra("flag", 3)
+                    intent.putExtra("bgmLevel", bgmVol)
+                    activity!!.startService(intent)
+                    false
+                }
+                else -> true
+            }
+        })
         dialog!!.show()
 
         return dialog

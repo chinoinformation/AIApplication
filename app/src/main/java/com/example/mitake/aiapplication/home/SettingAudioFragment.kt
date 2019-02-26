@@ -116,6 +116,7 @@ class SettingAudioFragment: Fragment() {
         )
 
         backButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             backButton!!.setOnClickListener(null)

@@ -68,6 +68,8 @@ class QuestActivity : AppCompatActivity() {
         homeIcon = findViewById(R.id.background_quest_home)
         homeIcon!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         homeIcon!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             homeIcon!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -82,6 +84,8 @@ class QuestActivity : AppCompatActivity() {
         mainQuestIcon = findViewById(R.id.background_quest_battle)
         mainQuestIcon!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         mainQuestIcon!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             mainQuestIcon!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -96,6 +100,8 @@ class QuestActivity : AppCompatActivity() {
         tutorialIcon = findViewById(R.id.background_quest_tutorial)
         tutorialIcon!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         tutorialIcon!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             tutorialIcon!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -110,6 +116,8 @@ class QuestActivity : AppCompatActivity() {
         dojoIcon = findViewById(R.id.background_quest_dojo)
         dojoIcon!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         dojoIcon!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             dojoIcon!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)

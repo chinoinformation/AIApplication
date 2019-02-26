@@ -57,6 +57,8 @@ class TutorialActivity : AppCompatActivity() {
         // ホームボタン
         backHome = findViewById(R.id.tutorial_back_home)
         backHome!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             backHome!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -69,6 +71,8 @@ class TutorialActivity : AppCompatActivity() {
         // ワールドマップボタン
         backQuest = findViewById(R.id.tutorial_back_world)
         backQuest!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             backQuest!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -94,17 +98,13 @@ class TutorialActivity : AppCompatActivity() {
 
         questAdapter = QuestListAdapter(applicationContext, R.layout.quest_view, listItems)
         listView!!.adapter = questAdapter
+        listView!!.isSoundEffectsEnabled = false
         listView!!.onItemClickListener = onItemClickListener
     }
 
     /** タップしたリストの処理 */
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-        // AudioManagerを取得する
-        val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        // 最大音量値を取得
-        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
-        // 現在の音量を取得する
-        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
         effectBgm!!.play("other_button")
         if (view.id == R.id.victory_condition) {
@@ -115,6 +115,35 @@ class TutorialActivity : AppCompatActivity() {
                         effectBgm!!.play("other_button")
                     }
             val dialog = builder.create()
+            dialog.setOnKeyListener({ _, keyCode, _ ->
+                when (keyCode) {
+                    KeyEvent.KEYCODE_VOLUME_UP -> {
+                        // 現在の音量を取得する
+                        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat() * ringVolume)
+                        val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                        val bgmVol = bgmLevel * ringVolume
+                        val intent = Intent(applicationContext, MyService::class.java)
+                        intent.putExtra("flag", 3)
+                        intent.putExtra("bgmLevel", bgmVol)
+                        startService(intent)
+                        false
+                    }
+                    KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                        // 現在の音量を取得する
+                        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+                        val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                        val bgmVol = bgmLevel * ringVolume
+                        val intent = Intent(applicationContext, MyService::class.java)
+                        intent.putExtra("flag", 3)
+                        intent.putExtra("bgmLevel", bgmVol)
+                        startService(intent)
+                        false
+                    }
+                    else -> true
+                }
+            })
             dialog.show()
             dialog.getButton(Dialog.BUTTON_POSITIVE).isSoundEffectsEnabled = false
         } else {

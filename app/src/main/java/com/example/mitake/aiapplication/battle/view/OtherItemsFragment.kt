@@ -107,6 +107,7 @@ class OtherItemsFragment : Fragment() {
         mainActivity = (activity as BattleActivity)
 
         attack!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             attack(0)
@@ -115,18 +116,21 @@ class OtherItemsFragment : Fragment() {
         }
 
         move!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             move()
         }
 
         end!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             mainActivity!!.end()
         }
 
         normalMenu!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             normalMenu!!.isEnabled = false
@@ -181,18 +185,21 @@ class OtherItemsFragment : Fragment() {
         }
 
         normalAttack!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             attack(0)
         }
 
         specialAttack!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             attack(1)
         }
 
         attackMove!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             ResetMap(mainActivity!!.canmoveMap, mainActivity!!.attackMap, mainActivity!!.placeList).resetList()
@@ -202,6 +209,7 @@ class OtherItemsFragment : Fragment() {
         }
 
         attackEnd!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             buttonChange(0)

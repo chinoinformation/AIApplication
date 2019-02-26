@@ -105,6 +105,7 @@ class MainButtonFragment : Fragment() {
         /** 各種ボタンのリスナーを設定 */
         root.main_home_button.setOnClickListener {
             if (activity!!::class.java != HomeActivity::class.java) {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("button")
                 val intent = Intent(activity, IntentActivity::class.java)
@@ -116,6 +117,7 @@ class MainButtonFragment : Fragment() {
         }
         root.main_char_button.setOnClickListener {
             if (activity!!::class.java != CharacterActivity::class.java) {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("button")
                 val intent = Intent(activity, IntentActivity::class.java)
@@ -127,6 +129,7 @@ class MainButtonFragment : Fragment() {
         }
         root.main_menu_button.setOnClickListener {
             if (activity!!::class.java != SettingActivity::class.java) {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("button")
                 val intent = Intent(activity, IntentActivity::class.java)

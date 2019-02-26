@@ -25,6 +25,9 @@ class InputUserNameFragment: DialogFragment() {
     private var soundPool: SoundPool? = null
     private var audioAttributes: AudioAttributes? = null
     private var effectBgm: EffectList? = null
+    private var am: AudioManager? = null
+    private var mVol: Float = 0f
+    private var ringVolume: Float = 0f
 
     /** ユーザ名 */
     private var userName: String = ""
@@ -39,11 +42,11 @@ class InputUserNameFragment: DialogFragment() {
         data = DataManagement(activity!!.applicationContext)
 
         // AudioManagerを取得する
-        val am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        am = activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         // 最大音量値を取得
-        val mVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        mVol = am!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
         // 現在の音量を取得する
-        val ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
         // SoundPool の設定
         audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -67,6 +70,7 @@ class InputUserNameFragment: DialogFragment() {
         // OKボタンを押す
         val OKButton: Button = alertView.findViewById(R.id.OK)
         OKButton.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             if (editUser.length() > 0) {
@@ -77,6 +81,7 @@ class InputUserNameFragment: DialogFragment() {
         // キャンセルボタンを押す
         val cancelButton: Button = alertView.findViewById(R.id.cancel)
         cancelButton.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             editUser.editableText.clear()
@@ -107,6 +112,9 @@ class InputUserNameFragment: DialogFragment() {
         dialog = null
         alert = null
         data = null
+        am = null
+        mVol = 0f
+        ringVolume = 0f
         Handler().postDelayed({
             effectBgm!!.release()
         }, 2000)

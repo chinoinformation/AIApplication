@@ -2,6 +2,7 @@ package com.example.mitake.aiapplication.character
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
@@ -15,6 +16,7 @@ import com.example.mitake.aiapplication.R
 import com.example.mitake.aiapplication.custom_layout.CsvReader
 import kotlinx.android.synthetic.main.fragment_char_organization_status.view.*
 import android.support.v7.app.AlertDialog
+import android.view.KeyEvent
 import android.widget.ToggleButton
 import com.bumptech.glide.Glide
 import com.example.mitake.aiapplication.bgm.EffectList
@@ -22,6 +24,7 @@ import com.example.mitake.aiapplication.data.DataManagement
 import kotlinx.android.synthetic.main.fragment_char_status.view.*
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
+import com.example.mitake.aiapplication.bgm.MyService
 
 
 @Suppress("DEPRECATION")
@@ -121,21 +124,25 @@ class CharOrganizationStatusFragment : Fragment() {
 
             // AI適用ボタンの初期設定
             f1!!.ai_button.setOnClickListener {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f1!!.ai_button, 0)
             }
             f2!!.ai_button.setOnClickListener {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f2!!.ai_button, 1)
             }
             f3!!.ai_button.setOnClickListener {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f3!!.ai_button, 2)
             }
             f4!!.ai_button.setOnClickListener {
+                ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                 effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                 effectBgm!!.play("other_button")
                 isChecked(f4!!.ai_button, 3)
@@ -217,6 +224,7 @@ class CharOrganizationStatusFragment : Fragment() {
                 })
                 .setNegativeButton("OK", { dialog, whichButton ->
                     //⇒OKボタンを押下した時のイベント処理
+                    ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                     effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                     effectBgm!!.play("other_button")
                     // キャラ名
@@ -227,10 +235,40 @@ class CharOrganizationStatusFragment : Fragment() {
                     statusChar(v, charId[type])
                 })
                 .setPositiveButton("キャンセル", { dialog, whichButton ->
+                    ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
                     effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                     effectBgm!!.play("other_button")
                 })
         val dialog = builder.create()
+        dialog.setOnKeyListener({ _, keyCode, _ ->
+            when (keyCode) {
+                KeyEvent.KEYCODE_VOLUME_UP -> {
+                    // 現在の音量を取得する
+                    ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat() * ringVolume)
+                    val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                    val bgmVol = bgmLevel * ringVolume
+                    val intent = Intent(activity!!.applicationContext, MyService::class.java)
+                    intent.putExtra("flag", 3)
+                    intent.putExtra("bgmLevel", bgmVol)
+                    activity!!.startService(intent)
+                    false
+                }
+                KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                    // 現在の音量を取得する
+                    ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                    effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+                    val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                    val bgmVol = bgmLevel * ringVolume
+                    val intent = Intent(activity!!.applicationContext, MyService::class.java)
+                    intent.putExtra("flag", 3)
+                    intent.putExtra("bgmLevel", bgmVol)
+                    activity!!.startService(intent)
+                    false
+                }
+                else -> true
+            }
+        })
         dialog.show()
         dialog.getButton(Dialog.BUTTON_POSITIVE).isSoundEffectsEnabled = false
         dialog.getButton(Dialog.BUTTON_NEGATIVE).isSoundEffectsEnabled = false

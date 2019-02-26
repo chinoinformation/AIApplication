@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity() {
          */
         menuButton = findViewById(R.id.menu)
         menuButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
@@ -162,6 +164,8 @@ class MainActivity : AppCompatActivity() {
     */
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP && canTouchScreen){
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             canTouchScreen = false
             effectBgm!!.play("start")
             val intent = Intent(this, IntentActivity::class.java)

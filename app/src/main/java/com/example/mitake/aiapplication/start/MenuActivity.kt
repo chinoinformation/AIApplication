@@ -52,6 +52,8 @@ class MenuActivity : AppCompatActivity() {
         returnButton = findViewById(R.id.attack_move_button)
         returnButton!!.setOnClickListener {
             returnButton!!.setOnClickListener(null)
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             finish()
             overridePendingTransition(R.animator.act_close_enter_anim, R.animator.act_close_exit_anim)
@@ -60,6 +62,8 @@ class MenuActivity : AppCompatActivity() {
         repairButton = findViewById(R.id.data_repair)
         repairButton!!.setOnClickListener {
             repairButton!!.setOnClickListener(null)
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             val intent = Intent(this, IntentActivity::class.java)
             intent.putExtra("Name", "Main")
@@ -75,21 +79,56 @@ class MenuActivity : AppCompatActivity() {
          */
         resetButton = findViewById(R.id.data_reset)
         resetButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             resetButton!!.isEnabled = false
             val builder = AlertDialog.Builder(this, R.style.MyAlertDialogStyle)
             builder.setTitle("最終確認")
                     .setMessage("アプリ内のデータをリセットします．よろしいですか．")
                     .setPositiveButton("キャンセル"){ _, _ ->
+                        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                         effectBgm!!.play("other_button")
                     }
                     .setCancelable(false)
                     .setNegativeButton("OK"){ _, _ ->
                         // OK button pressed
+                        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
                         effectBgm!!.play("other_button")
                         data!!.clearData()
                     }
             val dialog = builder.create()
+            dialog.setOnKeyListener({ _, keyCode, _ ->
+                when (keyCode) {
+                    KeyEvent.KEYCODE_VOLUME_UP -> {
+                        // 現在の音量を取得する
+                        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat() * ringVolume)
+                        val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                        val bgmVol = bgmLevel * ringVolume
+                        val intent = Intent(applicationContext, MyService::class.java)
+                        intent.putExtra("flag", 3)
+                        intent.putExtra("bgmLevel", bgmVol)
+                        startService(intent)
+                        false
+                    }
+                    KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                        // 現在の音量を取得する
+                        ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+                        effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
+                        val bgmLevel = data!!.readData("bgmLevel", "1")[0].toFloat()
+                        val bgmVol = bgmLevel * ringVolume
+                        val intent = Intent(applicationContext, MyService::class.java)
+                        intent.putExtra("flag", 3)
+                        intent.putExtra("bgmLevel", bgmVol)
+                        startService(intent)
+                        false
+                    }
+                    else -> true
+                }
+            })
             dialog.show()
             dialog.getButton(Dialog.BUTTON_POSITIVE).isSoundEffectsEnabled = false
             dialog.getButton(Dialog.BUTTON_NEGATIVE).isSoundEffectsEnabled = false
@@ -101,6 +140,8 @@ class MenuActivity : AppCompatActivity() {
         // ライセンス画面を表示
         siteButton = findViewById(R.id.site)
         siteButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             siteButton!!.isEnabled = false
             val newFragment = SiteDialogFragment.newInstance()

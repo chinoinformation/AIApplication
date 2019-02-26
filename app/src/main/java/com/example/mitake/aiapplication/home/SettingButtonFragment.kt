@@ -75,6 +75,7 @@ class SettingButtonFragment: Fragment() {
 
         // ユーザ設定画面へ
         userSettingButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             userSettingButton!!.setOnClickListener(null)
@@ -96,6 +97,7 @@ class SettingButtonFragment: Fragment() {
 
         // 音量設定画面へ
         audioSettingButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             userSettingButton!!.setOnClickListener(null)
@@ -117,6 +119,7 @@ class SettingButtonFragment: Fragment() {
 
         // タイトル画面に戻る
         titleButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             titleButton!!.setOnClickListener(null)
@@ -130,6 +133,7 @@ class SettingButtonFragment: Fragment() {
 
         // ライセンス画面
         otherButton!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
             effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             otherButton!!.isEnabled = false

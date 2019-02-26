@@ -65,6 +65,8 @@ class HomeActivity : AppCompatActivity(){
         questText = findViewById(R.id.quest_text)
         questText!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         questText!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             questText!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)

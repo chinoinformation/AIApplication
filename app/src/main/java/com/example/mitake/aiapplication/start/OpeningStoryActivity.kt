@@ -199,6 +199,7 @@ class OpeningStoryActivity : AppCompatActivity() {
         button!!.alpha = 0f
         button!!.setOnClickListener{
             if (finish){
+                button!!.setOnClickListener(null)
                 val intent = Intent(this, IntentActivity::class.java)
                 intent.putExtra("Name", "Main")
                 intent.putExtra("musicId", bgmId)

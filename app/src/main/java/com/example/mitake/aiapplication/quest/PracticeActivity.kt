@@ -78,6 +78,8 @@ class PracticeActivity : AppCompatActivity() {
         // ホーム画面に遷移するリスナーを設定
         backHome = findViewById(R.id.back_home)
         backHome!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             backHome!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -91,6 +93,8 @@ class PracticeActivity : AppCompatActivity() {
         // ワールドマップ画面に遷移するリスナーを設定
         backQuest = findViewById(R.id.back_world)
         backQuest!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("button")
             backQuest!!.setOnClickListener(null)
             val intent = Intent(this, IntentActivity::class.java)
@@ -104,6 +108,8 @@ class PracticeActivity : AppCompatActivity() {
         // 戦闘画面に遷移するリスナーを設定
         startQuest = findViewById(R.id.start_quest)
         startQuest!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("go_battle")
             startQuest!!.setOnClickListener(null)
             getData()
@@ -119,6 +125,8 @@ class PracticeActivity : AppCompatActivity() {
         // 戦闘AIの詳細を表示する
         detailAI = findViewById(R.id.detail_AI)
         detailAI!!.setOnClickListener {
+            ringVolume = am!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat() / mVol
+            effectBgm!!.setVol(data!!.readData("effectLevel", "1")[0].toFloat()*ringVolume)
             effectBgm!!.play("other_button")
             detailAI!!.isEnabled = false
             val newFragment = DetailAIDialogFragment.newInstance()
